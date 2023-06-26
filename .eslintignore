@@ -1,0 +1,3 @@
+# eslit 规则忽略文件夹
+dist 
+node_modules
