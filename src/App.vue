@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
+import { Plus } from '@element-plus/icons-vue'
 </script>
 
 <template>
   <HelloWorld msg="Vite + Vue" />
+  <el-button :icon="Plus">CLick</el-button>
 </template>
 
 <style scoped>
