@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
+    "axios": "^1.4.0",
     "element-plus": "^2.3.7",
     "vue": "^3.2.47"
   },
@@ -36,7 +37,10 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.15.1",
     "husky": "^8.0.0",
+    "mockjs": "0.1.10",
     "prettier": "^2.8.8",
+    "sass": "^1.63.6",
+    "sass-loader": "^13.3.2",
     "stylelint": "^15.9.0",
     "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-recess-order": "^4.2.0",
@@ -48,6 +52,7 @@
     "stylelint-scss": "^5.0.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
+    "vite-plugin-mock": "2.9.0",
     "vite-plugin-svg-icons": "^2.0.1",
     "vue-tsc": "^1.4.2"
   }

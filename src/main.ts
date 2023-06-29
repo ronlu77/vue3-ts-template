@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
-import './style.css'
+// 引入模板全局样式
+import '@/styles/index.scss'
 import App from '@/App.vue'
 // 引入Element-puls插件与样式
 import ElementPlus from 'element-plus'
