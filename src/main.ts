@@ -10,6 +10,8 @@ import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // svg插件需要配置代码
 import 'virtual:svg-icons-register'
+// 引入路由
+import router from './router'
 
 // 获取应用实例对象
 const app = createApp(App)
@@ -17,5 +19,6 @@ const app = createApp(App)
 app.use(ElementPlus, {
   locale: zhCn,
 })
+app.use(router)
 
 app.mount('#app')
