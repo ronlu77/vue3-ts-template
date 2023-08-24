@@ -1,0 +1,22 @@
+// 更改el-menu-item 选中时的样式
+.el-menu-item .is-active {
+    &::after {
+        content: "";
+        width: 5px;
+        height: 100%;
+        background: $active-color;
+    }
+}
+
+.el-menu-item:hover {
+    border-radius: 2px;
+    box-shadow: 0 0 8 rgba($color: #000000, $alpha: 1.0);
+}
+
+.el-scrollbar__view {
+    height: 100%;
+}
+
+.el-icon {
+    cursor: pointer;
+}

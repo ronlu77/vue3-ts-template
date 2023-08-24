@@ -4,22 +4,17 @@ export interface LoginFormData {
   password?: string
 }
 
-export interface ResponseData {
-  code?: number
+interface dataType {
+  token?: string
   message?: string
-  ok?: boolean
+}
+export interface LoginResponseData {
+  code?: number
+  data: dataType
 }
 
-export interface LoginResponseData extends ResponseData {
-  data?: string
-}
-
-export interface userInfoResponseData extends ResponseData {
-  data: {
-    routes: string[]
-    buttons: string[]
-    roles: string[]
-    name: string
-    avatar: string
-  }
+export interface UserState {
+  userinfo: LoginFormData
+  token: string
+  menuRoutes: any[]
 }

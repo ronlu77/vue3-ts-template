@@ -9,6 +9,17 @@ import { viteMockServe } from 'vite-plugin-mock'
 
 export default defineConfig(({ command }) => {
   return {
+    // 前端跨域代理
+    server: {
+      proxy: {
+        '/dev-api': {
+          target: 'http://127.0.0.1:4523/m1/3074293-0-default',
+          // 支持跨域
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/dev-api/, ''),
+        },
+      },
+    },
     plugins: [
       vue(),
       createSvgIconsPlugin({

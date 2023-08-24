@@ -2,13 +2,14 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
-// step1 通过create方法创建axios实例对象，可以进行一些基础配置
+//#region step1 通过create方法创建axios实例对象，可以进行一些基础配置
 const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 5000,
 })
+//#endregion
 
-// step2 设置请求拦截器和响应拦截器
+//#region step2 设置请求拦截器和响应拦截器
 request.interceptors.request.use((config) => {
   //  config.headers 配置请求头，经常给服务器携带公共参数
   // 返回配置对象
@@ -52,6 +53,8 @@ request.interceptors.response.use(
     return Promise.reject(error)
   },
 )
+//#endregion
 
-// step3 对外暴露
+//#region step3 对外暴露
 export default request
+//#endregion

@@ -3,8 +3,8 @@ import { LoginFormData } from './type'
 
 export function login(data: LoginFormData) {
   return request({
-    url: '/user/login',
-    method: 'post',
+    url: '/login',
+    method: 'get',
     data,
   })
 }
