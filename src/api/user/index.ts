@@ -8,3 +8,10 @@ export function login(data: LoginFormData) {
     data,
   })
 }
+
+export function logout() {
+  return request({
+    url: '/logout',
+    method: 'delete',
+  })
+}

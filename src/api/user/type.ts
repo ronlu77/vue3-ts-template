@@ -6,15 +6,12 @@ export interface LoginFormData {
 
 interface dataType {
   token?: string
+  username?: string
+  avatar?: string
   message?: string
 }
 export interface LoginResponseData {
   code?: number
   data: dataType
-}
-
-export interface UserState {
-  userinfo: LoginFormData
-  token: string
-  menuRoutes: any[]
+  message?: string
 }

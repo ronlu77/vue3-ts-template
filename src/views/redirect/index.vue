@@ -11,7 +11,6 @@ export default {
       params: { path },
       query,
     } = route
-    console.log('path', path)
     router.replace({ path: '/' + path, query })
     return () => h('div')
   },

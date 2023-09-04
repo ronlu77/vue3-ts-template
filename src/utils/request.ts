@@ -1,5 +1,6 @@
 // axios 进行二次封装
 import axios from 'axios'
+import useUserStore from '@/store/modules/user'
 import { ElMessage } from 'element-plus'
 
 //#region step1 通过create方法创建axios实例对象，可以进行一些基础配置
@@ -12,6 +13,10 @@ const request = axios.create({
 //#region step2 设置请求拦截器和响应拦截器
 request.interceptors.request.use((config) => {
   //  config.headers 配置请求头，经常给服务器携带公共参数
+  const userStore = useUserStore()
+  if (userStore.token) {
+    config.headers.token = userStore.token
+  }
   // 返回配置对象
   return config
 })
