@@ -54,6 +54,7 @@ function handleLogout() {
     .userLogout()
     .then(() => {
       router.replace({ path: '/login' })
+      console.log('trigger', route.fullPath)
     })
     .catch((err) => {
       console.log(err)

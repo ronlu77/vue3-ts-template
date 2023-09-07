@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <router-view v-slot="{ Component, route }">
       <transition name="fade-transform" mode="out-in">
         <!-- <keep-alive> -->
@@ -22,6 +22,10 @@ const currentYear = computed(() => new Date().getFullYear())
 </script>
 
 <style lang="scss" scoped>
+.container {
+  height: 100%;
+  padding: 16px;
+}
 .copyright {
   position: fixed;
   bottom: 10px;

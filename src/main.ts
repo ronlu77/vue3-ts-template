@@ -19,7 +19,7 @@ import router from './router'
 import pinia from './store'
 // 引入全局组件注册插件
 import componentsinit from './components'
-
+// 引入路由鉴权文件
 import './permission.ts'
 
 // 获取应用实例对象

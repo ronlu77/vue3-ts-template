@@ -1,17 +1,19 @@
 // 登录接口需要携带参数ts类型
+interface ResponseUserData {
+  code?: number
+  message?: string
+}
+
 export interface LoginFormData {
   username?: string
   password?: string
 }
 
-interface dataType {
+export interface UserInfoData {
   token?: string
   username?: string
   avatar?: string
-  message?: string
 }
-export interface LoginResponseData {
-  code?: number
-  data: dataType
-  message?: string
+export interface LoginResponseData extends ResponseUserData {
+  data: UserInfoData
 }
