@@ -38,11 +38,11 @@ import AppMain from './main/index.vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
-import useUserStore from '@/store/modules/user'
+import { usePermissionStore } from '@/store/modules/permission'
 
 const route = useRoute()
 const isCollapse = computed(() => !useAppStore().opened)
-const menuList = computed(() => useUserStore().menuRoutes)
+const menuList = computed(() => usePermissionStore().frontMenuList)
 const currentActiveMenuPath = computed(() => route.path.toString())
 </script>
 

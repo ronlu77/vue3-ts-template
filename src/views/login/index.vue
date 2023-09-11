@@ -41,7 +41,8 @@
           :loading="loading"
           @click.prevent="handleLogin"
         >
-          <span>登 录</span>
+          <span v-if="!loading">登 录</span>
+          <span v-else>登 录 中...</span>
         </el-button>
       </div>
     </div>
@@ -51,6 +52,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import useUserStore from '@/store/modules/user'
+import { ElNotification } from 'element-plus'
 import { User, Lock, View, Hide } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -86,12 +88,18 @@ function handleLogin() {
     .userLogin(loginForm)
     .then(() => {
       loading.value = false
+      ElNotification({
+        title: 'Success',
+        type: 'success',
+        message: '登录成功❗',
+      })
       router.push('./').catch((err) => {
         console.log('error login', err)
       })
     })
     .catch((err) => {
       loading.value = false
+      console.warn(err)
     })
 }
 

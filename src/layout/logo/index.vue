@@ -19,15 +19,15 @@ defineProps({
   overflow: hidden;
 
   img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
 
   a {
     font-size: 1.2rem;
     font-weight: bold;
     text-decoration: none;
-    color: $text-color;
+    color: $text-light-color;
     margin-left: 10px;
   }
 }

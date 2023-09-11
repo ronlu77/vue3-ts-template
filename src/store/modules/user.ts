@@ -8,7 +8,9 @@ import { REMOVE_TOKEN, SET_TOKEN } from '@/utils/auth'
 const useUserStore = defineStore('User', {
   state: (): UserStore => ({
     username: '',
-    avatar: '',
+    avatar:
+      '' ||
+      'https://p6-passport.byteacctimg.com/img/user-avatar/02a43675ca9234e9aaa4e30ac2accb09~40x40.awebps',
     token: localStorage.getItem('USER_TOKEN') as string | '',
     menuRoutes: [],
   }),

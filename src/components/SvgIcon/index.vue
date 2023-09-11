@@ -1,29 +1,29 @@
+<!-- 如果svg中存在fill属性则无法更改颜色, 只能使用单色图表 -->
 <template>
-  <div>
-    <svg :style="{ width, height }">
-      <use :xlink-href="prefix + name" :fill="color"></use>
+  <div class="svg-icon-wrapper">
+    <svg
+      class="svg-icon"
+      :aria-hidden="true"
+      :style="{ fontSize: size + 'px', color }"
+    >
+      <use :href="`#icon-${name}`"></use>
     </svg>
   </div>
 </template>
 <script setup lang="ts">
-defineProps({
-  prefix: {
-    type: String,
-    default: '#icon-',
-  },
-  name: String,
-  color: {
-    type: String,
-    default: '',
-  },
-  width: {
-    type: String,
-    default: '16px',
-  },
-  height: {
-    type: String,
-    default: '16px',
-  },
-})
+defineProps<{
+  name: string
+  size: number
+  color?: string
+}>()
 </script>
-<style lang="scss" scoped></style>
+<style scoped>
+.svg-icon {
+  width: 22px;
+  height: 22px;
+  /* vertical-align 只对行内元素有效 */
+  vertical-align: -0.3em;
+  fill: currentColor;
+  overflow: hidden;
+}
+</style>

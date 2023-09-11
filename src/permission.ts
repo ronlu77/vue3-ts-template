@@ -2,6 +2,7 @@
 import router from './router'
 import pinia from './store'
 import useUserStore from './store/modules/user'
+import { usePermissionStore } from './store/modules/permission'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import settting from './settting'
@@ -9,6 +10,7 @@ import settting from './settting'
 // 路由白名单
 const whiteList = ['/login']
 const userStore = useUserStore(pinia)
+const permissionStore = usePermissionStore(pinia)
 
 router.beforeEach(async (to, from, next) => {
   nprogress.start()
@@ -26,6 +28,8 @@ router.beforeEach(async (to, from, next) => {
         // 用户信息不存在的情况下，拉取用户信息, 跳转到首页
         try {
           await userStore.getUserInfo(token)
+          // todo 根据用户权限动态加载路由（目前直接加载常量路由）
+          permissionStore.setFontMenuList()
           next({ path: '/' })
         } catch (err) {
           //  一般在此处处理 token 过期的情况
