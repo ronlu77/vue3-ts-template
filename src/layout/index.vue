@@ -23,6 +23,7 @@
     </div>
     <div class="layout-tabbar">
       <Tabbar />
+      <ScrollTagView />
     </div>
     <div class="layout-main">
       <AppMain />
@@ -33,6 +34,7 @@
 <script setup lang="ts">
 import Logo from './logo/index.vue'
 import MenuItem from './menu-item/index.vue'
+import ScrollTagView from './tag-view/index.vue'
 import Tabbar from './tabbar/index.vue'
 import AppMain from './main/index.vue'
 import { computed } from 'vue'
@@ -63,6 +65,8 @@ const currentActiveMenuPath = computed(() => route.path.toString())
     position: fixed;
     top: 0;
     left: $base-menu-width;
+    display: flex;
+    flex-direction: column;
     width: calc(100% - $base-menu-width);
     height: $base-tabbar-height;
     transition: all 0.3s;

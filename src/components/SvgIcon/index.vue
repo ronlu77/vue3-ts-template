@@ -13,11 +13,18 @@
 <script setup lang="ts">
 defineProps<{
   name: string
-  size: number
+  size: number | string
   color?: string
 }>()
 </script>
 <style scoped>
+.svg-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 6px;
+}
 .svg-icon {
   width: 22px;
   height: 22px;

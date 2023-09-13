@@ -36,7 +36,7 @@ function handleToggleCollpase() {
   align-items: center;
   color: $text-color;
   font-size: 22px;
-  height: 100%;
+  height: 40px;
   border-bottom: 1px solid var(--el-border-color);
 
   .tabbar-left {

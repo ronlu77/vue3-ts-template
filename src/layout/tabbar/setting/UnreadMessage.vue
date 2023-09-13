@@ -3,7 +3,7 @@
     <el-popover placement="bottom" trigger="click" :width="280">
       <template #reference>
         <el-badge is-dot>
-          <SvgIcon lass="svg-icon__item" name="message" :size="22"></SvgIcon>
+          <SvgIcon class="svg-icon__item" name="message" :size="22"></SvgIcon>
         </el-badge>
       </template>
       <el-tabs v-model="activeTab" @tab-change="handleActiveTabChange">
@@ -128,7 +128,6 @@ function handleActiveTabChange(tab: string) {
 .unread-message_container {
   position: relative;
   height: 100%;
-  padding: 0 6px;
   cursor: pointer;
 
   &:hover {

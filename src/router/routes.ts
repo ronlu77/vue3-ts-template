@@ -5,6 +5,7 @@ import Layout from '@/layout/index.vue'
  * meta: {
  *  hidden: 控制侧边栏菜单显隐，默认false;
  *  title: 设置路由标题;
+ *  affix: 是否可以固定到页面标签栏，默认为false， 如果为true，则不可在页面标签栏删除；
  * }
  */
 export const constantRoutes = [
@@ -20,6 +21,7 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index.vue'),
         meta: {
           title: '首页',
+          affix: true,
         },
       },
     ],
@@ -83,8 +85,10 @@ export const constantRoutes = [
       hidden: true,
     },
   },
-  // {
-  //   path: '/:pathMatch(.*)*',
-  //   redirect: '/404',
-  // },
+
+  // 404 路由要放在最后
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/404',
+  },
 ]

@@ -1,8 +1,8 @@
-// 项目全局scss变量 #F1F1FB #EA4C3C #393A62 #9292AE #DBA09E #747399
+// 项目全局scss变量 #F1F1FB #0960BD #393A62 #9292AE #DBA09E #747399
 $background-color: #FFF;
 $text-color: #9292AE;
 $text-light-color: #393A62;
-$active-color: #EA4C3C;
+$active-color: #0960BD;
 $hover-color: #F9F9F9;
 
 // 左侧菜单的宽度
@@ -11,6 +11,7 @@ $base-menu-hiden-width: 60px;
 $base-menu-background: #F1F1FB;
 
 // 顶部导航的高度
-$base-tabbar-height: 40px;
-
+$base-tabbar-height: 70px;
 $base-logo-height: 60px;
+
+$tag-view-height: 30px;

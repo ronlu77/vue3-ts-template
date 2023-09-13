@@ -51,7 +51,6 @@ function handleLogout() {
 .user-center {
   height: 100%;
   min-width: 120px;
-  padding: 0 10px;
   font-size: 14px;
   color: $text-color;
   cursor: pointer;

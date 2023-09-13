@@ -67,7 +67,6 @@ function toSetting() {
   .svg-icon__item {
     display: inline-block;
     height: 100%;
-    padding: 0 6px;
     cursor: pointer;
 
     &:hover {
