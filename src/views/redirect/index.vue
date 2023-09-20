@@ -1,17 +1,17 @@
 <script>
 import { h } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 export default {
-  name: 'RedirectPage',
+  name: 'Redirect',
   setup(props, context) {
     const route = useRoute()
     const router = useRouter()
     const {
       params: { path },
-      query,
     } = route
-    router.replace({ path: '/' + path, query })
+
+    router.replace('/' + path)
     return () => h('div')
   },
 }

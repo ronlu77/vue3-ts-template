@@ -19,11 +19,19 @@ import router from './router'
 import pinia from './store'
 // 引入全局组件注册插件
 import componentsinit from './components'
+// 引入全局自定义注册方法
+import setupGlobalDirectives from './directive/index.ts'
 // 引入路由鉴权文件
 import './permission.ts'
+// import mitt from 'mitt'
+import './utils/tab.ts'
 
 // 获取应用实例对象
 const app = createApp(App)
+
+setupGlobalDirectives(app)
+// 设置全局事件总线 $tab
+// app.config.globalProperties.$tab = mitt()
 // 安装Element-plus插件
 app.use(ElementPlus, {
   locale: zhCn,

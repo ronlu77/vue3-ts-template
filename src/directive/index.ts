@@ -1,5 +1,5 @@
-// import '' from ''
+import throttle from './throttle'
 
-export default (app: object) => {
-  // app.directive('', )
+export default (app: any) => {
+  app.directive('throttle', throttle)
 }

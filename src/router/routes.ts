@@ -1,3 +1,4 @@
+import { AppRouteRecordRow } from './types.ts'
 // 对外暴露常量路由
 import Layout from '@/layout/index.vue'
 /**
@@ -32,6 +33,16 @@ export const constantRoutes = [
     name: 'Login',
     hidden: true,
     meta: { title: '登录' },
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404/index.vue'),
+    name: '404',
+    hidden: true,
+    meta: {
+      title: '404',
+      hidden: true,
+    },
   },
   {
     path: '/redirect',
@@ -74,16 +85,6 @@ export const constantRoutes = [
         meta: { title: '掘金', icon: '' },
       },
     ],
-  },
-  {
-    path: '/404',
-    component: () => import('@/views/404/index.vue'),
-    name: '404',
-    hidden: true,
-    meta: {
-      title: '404',
-      hidden: true,
-    },
   },
 
   // 404 路由要放在最后

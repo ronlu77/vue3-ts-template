@@ -70,6 +70,7 @@ const currentActiveMenuPath = computed(() => route.path.toString())
     width: calc(100% - $base-menu-width);
     height: $base-tabbar-height;
     transition: all 0.3s;
+    z-index: 2;
   }
 
   .layout-main {
@@ -80,6 +81,7 @@ const currentActiveMenuPath = computed(() => route.path.toString())
     height: calc(100vh - $base-tabbar-height);
     overflow: auto;
     transition: all 0.3s;
+    z-index: 1;
   }
 
   &.hiden {
