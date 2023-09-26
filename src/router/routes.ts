@@ -23,6 +23,16 @@ export const constantRoutes = [
         meta: {
           title: '首页',
           affix: true,
+          icon: 'file',
+        },
+      },
+      {
+        path: 'center',
+        name: 'Center',
+        hidden: true,
+        component: () => import('@/views/center/index.vue'),
+        meta: {
+          title: '个人中心',
         },
       },
     ],
@@ -60,7 +70,7 @@ export const constantRoutes = [
     component: Layout,
     name: 'Role',
     redirect: '/rights/user',
-    meta: { title: '权限管理', icon: '' },
+    meta: { title: '权限管理', icon: 'setting' },
     children: [
       {
         path: 'user',
@@ -74,6 +84,12 @@ export const constantRoutes = [
         name: 'Role',
         meta: { title: '角色管理', icon: '' },
       },
+      {
+        path: 'resource',
+        component: () => import('@/views/rights/resource/index.vue'),
+        name: 'Resource',
+        meta: { title: '资源管理', icon: '' },
+      },
     ],
   },
   {
@@ -82,11 +98,10 @@ export const constantRoutes = [
     children: [
       {
         path: 'https://juejin.cn',
-        meta: { title: '掘金', icon: '' },
+        meta: { title: '掘金', icon: 'link' },
       },
     ],
   },
-
   // 404 路由要放在最后
   {
     path: '/:pathMatch(.*)*',

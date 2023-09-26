@@ -10,9 +10,18 @@
       </div>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>个人中心</el-dropdown-item>
-          <el-dropdown-item>锁定屏幕</el-dropdown-item>
-          <el-dropdown-item @click="handleLogout">退出系统</el-dropdown-item>
+          <el-dropdown-item>
+            <SvgIcon name="" size="12" />
+            <router-link :to="{ path: '/center' }">个人中心</router-link>
+          </el-dropdown-item>
+          <el-dropdown-item @click="handleLockScreen">
+            <SvgIcon name="" size="12" />
+            <span>锁定屏幕</span>
+          </el-dropdown-item>
+          <el-dropdown-item @click="handleLogout">
+            <SvgIcon name="" size="12" />
+            <span>退出系统</span>
+          </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -26,6 +35,11 @@ import { ElNotification } from 'element-plus'
 
 const userStore = useUserStore()
 const router = useRouter()
+
+/** 锁定屏幕 */
+function handleLockScreen() {
+  console.log('lock')
+}
 
 /** 登出操作
  *  1.清空用户信息;

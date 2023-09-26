@@ -52,6 +52,7 @@
         name="fullscreen2"
         size="12"
         color="#9292AE"
+        @click="toToggleMainContentFullScreen"
       />
     </div>
   </div>
@@ -71,7 +72,7 @@ import {
 import { useRouter, useRoute } from 'vue-router'
 import { useTagViewsStore } from '@/store/modules/tagViews'
 
-const { proxy } = getCurrentInstance()
+const { proxy, appContext } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const tagViewsStore = useTagViewsStore()
@@ -148,6 +149,7 @@ function handleCloseTagView(tagView: any) {
 
 function handleRefreshPage() {
   tagViewsStore.refreshPage(route)
+
   // todo 添加svg-icon 旋转（目前思路通过事件总线实现）
 }
 
@@ -176,6 +178,12 @@ function toToggleTagViewOptionCard() {
 
 function handleCardClose(val: boolean) {
   isVisible.value = val
+}
+
+function toToggleMainContentFullScreen() {
+  //todo main-app 部分的全屏实现
+  // top 和 sidebar 隐藏再进行全屏操作
+  isVisible.value = false
 }
 
 onBeforeMount(() => {

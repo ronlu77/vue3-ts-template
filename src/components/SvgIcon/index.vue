@@ -10,12 +10,17 @@
     </svg>
   </div>
 </template>
-<script setup lang="ts">
-defineProps<{
+<script setup lang="ts" name="SvgIcon">
+interface Props {
   name: string
   size: number | string
   color?: string
-}>()
+}
+
+// 使用withDefaults编译宏来设置defineProps默认值
+withDefaults(defineProps<Props>(), {
+  color: '#9292AE',
+})
 </script>
 <style scoped>
 .svg-icon-wrapper {
@@ -25,6 +30,7 @@ defineProps<{
   height: 100%;
   padding: 0 6px;
 }
+
 .svg-icon {
   width: 22px;
   height: 22px;

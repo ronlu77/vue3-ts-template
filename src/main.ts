@@ -11,6 +11,10 @@ import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // 引入全局注册 el-icon 组件插件
 import elementIcon from '@/assets/icons/index.ts'
+// 黑暗主题
+import 'element-plus/theme-chalk/dark/css-vars.css'
+// import './styles/dark/css-vars.css'
+
 // svg插件需要配置代码
 import 'virtual:svg-icons-register'
 // 引入路由
@@ -21,6 +25,8 @@ import pinia from './store'
 import componentsinit from './components'
 // 引入全局自定义注册方法
 import setupGlobalDirectives from './directive/index.ts'
+// 引入全局自定义插件
+import installGloablPlugins from './plugins/index.ts'
 // 引入路由鉴权文件
 import './permission.ts'
 // import mitt from 'mitt'
@@ -31,6 +37,7 @@ const app = createApp(App)
 
 setupGlobalDirectives(app)
 // 设置全局事件总线 $tab
+installGloablPlugins(app)
 // app.config.globalProperties.$tab = mitt()
 // 安装Element-plus插件
 app.use(ElementPlus, {

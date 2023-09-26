@@ -1,3 +1,4 @@
+/** 扩展菜单支持外部链接 */
 <template>
   <component :is="type" v-bind="linkProps(to)">
     <slot />

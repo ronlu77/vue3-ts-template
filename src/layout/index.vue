@@ -59,8 +59,13 @@ const currentActiveMenuPath = computed(() => route.path.toString())
     width: $base-menu-width;
     height: 100vh;
     background: $base-menu-background;
-    transition: all 0.3s;
+    transition: all 0.3s ease-in;
   }
+
+  :deep(.el-menu--collapse) {
+    width: 100%;
+  }
+
   .layout-tabbar {
     position: fixed;
     top: 0;
@@ -69,7 +74,7 @@ const currentActiveMenuPath = computed(() => route.path.toString())
     flex-direction: column;
     width: calc(100% - $base-menu-width);
     height: $base-tabbar-height;
-    transition: all 0.3s;
+    transition: all 0.3s ease-in;
     z-index: 2;
   }
 
@@ -80,7 +85,7 @@ const currentActiveMenuPath = computed(() => route.path.toString())
     width: calc(100% - $base-menu-width);
     height: calc(100vh - $base-tabbar-height);
     overflow: auto;
-    transition: all 0.3s;
+    transition: all 0.3s ease-in;
     z-index: 1;
   }
 
@@ -96,5 +101,7 @@ const currentActiveMenuPath = computed(() => route.path.toString())
       left: $base-menu-hiden-width;
     }
   }
+
+  
 }
 </style>

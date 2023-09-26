@@ -2,9 +2,9 @@
   <div class="container">
     <router-view v-slot="{ Component, route }">
       <transition name="fade-transform" mode="out-in">
-        <!-- <keep-alive> -->
-        <component :is="Component" :key="key"></component>
-        <!-- </keep-alive> -->
+        <keep-alive :include="cacheViewList">
+          <component :is="Component" :key="route.path"></component>
+        </keep-alive>
       </transition>
     </router-view>
     <div class="copyright">
@@ -15,10 +15,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useTagViewsStore } from '@/store/modules/tagViews'
 
-const key = computed(() => useRoute().path)
 const currentYear = computed(() => new Date().getFullYear())
+const cacheViewList = computed(() => useTagViewsStore().cacheTagList)
 </script>
 
 <style lang="scss" scoped>

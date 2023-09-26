@@ -7,15 +7,21 @@
         :to="resolvePath(onlychildren.path, onlychildren.query)"
       >
         <el-menu-item :index="resolvePath(onlychildren.path)">
+          <!-- item 组件实现有问题 -->
           <!-- <Item :data="onlychildren.meta" /> -->
-          {{ onlychildren.meta.title }}
+          <SvgIcon v-if="onlychildren.meta && onlychildren.meta.icon" class="svg-icon__item" :name="onlychildren.meta.icon" :size="14" />
+          <template #title v-if="onlychildren.meta && onlychildren.meta.title">
+            <span>{{ onlychildren.meta.title }}</span>
+          </template>
         </el-menu-item>
       </Link>
     </template>
     <!-- 多级嵌套目录结构：teleported 控制当菜单收缩时多级下拉出现弹窗展示 -->
     <el-sub-menu v-else :index="resolvePath(item.path)" teleported>
       <template #title v-if="item.meta">
-        {{ item.meta.title }}
+        <SvgIcon v-if="item.meta.icon" class="svg-icon__item" :name="item.meta.icon" :size="14" />
+        <!-- <Item :data="item.meta" /> -->
+        <span v-if="!isCollapse">{{ item.meta.title }}</span>
       </template>
       <!-- 使用组件递归时需要指定组件的name，否则无法调用 -->
       <MenuItem
@@ -35,16 +41,19 @@ export default {
 </script>
 
 <script setup lang="ts">
-// import Item from '../item/index.vue'
-import Link from '../link/index.vue'
-import { ref } from 'vue'
+import Item from '../components/item/index.vue'
+import Link from '../components/link/index.vue'
+import { ref, computed } from 'vue'
+import { useAppStore } from '@/store/modules/app'
 import { isExtrernalLink } from '@/utils/validate'
 
-const props = defineProps({
-  item: { type: Object, required: true },
-  path: { type: String, required: true },
-})
+interface Props {
+  item: object
+  path: string
+}
+const props = withDefaults(defineProps<Props>(), {})
 const onlychildren = ref(null)
+const isCollapse = computed(() => !useAppStore().opened)
 
 /** 判断是否只存在一个children */
 function hasOnlyChildren(childrenRoutes = [], parentRoute = {}) {
