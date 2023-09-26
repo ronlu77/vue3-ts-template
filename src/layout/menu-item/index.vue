@@ -9,7 +9,12 @@
         <el-menu-item :index="resolvePath(onlychildren.path)">
           <!-- item 组件实现有问题 -->
           <!-- <Item :data="onlychildren.meta" /> -->
-          <SvgIcon v-if="onlychildren.meta && onlychildren.meta.icon" class="svg-icon__item" :name="onlychildren.meta.icon" :size="14" />
+          <SvgIcon
+            v-if="onlychildren.meta && onlychildren.meta.icon"
+            class="svg-icon__item"
+            :name="onlychildren.meta.icon"
+            :size="14"
+          />
           <template #title v-if="onlychildren.meta && onlychildren.meta.title">
             <span>{{ onlychildren.meta.title }}</span>
           </template>
@@ -19,7 +24,12 @@
     <!-- 多级嵌套目录结构：teleported 控制当菜单收缩时多级下拉出现弹窗展示 -->
     <el-sub-menu v-else :index="resolvePath(item.path)" teleported>
       <template #title v-if="item.meta">
-        <SvgIcon v-if="item.meta.icon" class="svg-icon__item" :name="item.meta.icon" :size="14" />
+        <SvgIcon
+          v-if="item.meta.icon"
+          class="svg-icon__item"
+          :name="item.meta.icon"
+          :size="14"
+        />
         <!-- <Item :data="item.meta" /> -->
         <span v-if="!isCollapse">{{ item.meta.title }}</span>
       </template>

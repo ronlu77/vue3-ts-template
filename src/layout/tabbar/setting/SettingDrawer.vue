@@ -1,17 +1,35 @@
 <template>
-  <el-drawer v-model="useVisible" title="项目配置" size="20%" destroy-on-close append-to-body>
+  <el-drawer
+    v-model="useVisible"
+    title="项目配置"
+    size="20%"
+    destroy-on-close
+    append-to-body
+  >
     <div class="setting-drawer-main">
       <el-scrollbar>
         <div style="height: 1000px">
           <el-divider>主题配置</el-divider>
           <div>
             <label for="">黑暗模式</label>
-            <el-switch v-model="isDark" inline-prompt active-text="dark" size="large" inactive-text="light"
-              @change="toggleDark" />
+            <el-switch
+              v-model="isDark"
+              inline-prompt
+              active-text="dark"
+              size="large"
+              inactive-text="light"
+              @change="toggleDark"
+            />
           </div>
           <div>
             <label for="">灰色模式</label>
-            <el-switch v-model="isDark" inline-prompt active-text="gray" size="large" inactive-text="light" />
+            <el-switch
+              v-model="isDark"
+              inline-prompt
+              active-text="gray"
+              size="large"
+              inactive-text="light"
+            />
           </div>
           <el-divider>导航栏模式</el-divider>
           <el-divider>界面功能</el-divider>

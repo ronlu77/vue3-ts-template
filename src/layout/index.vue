@@ -101,7 +101,5 @@ const currentActiveMenuPath = computed(() => route.path.toString())
       left: $base-menu-hiden-width;
     }
   }
-
-  
 }
 </style>
