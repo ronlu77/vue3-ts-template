@@ -8,7 +8,6 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { viteMockServe } from 'vite-plugin-mock'
 // 引入setup 设置组件名插件
 import vueSetupExtend from 'vite-plugin-vue-setup-extend'
-console.log('git', process.env)
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd())

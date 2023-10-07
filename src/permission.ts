@@ -3,6 +3,7 @@ import router from './router'
 import pinia from './store'
 import useUserStore from './store/modules/user'
 import { usePermissionStore } from './store/modules/permission'
+import { useTagViewsStore } from './store/modules/tagViews'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import settting from './settting'
@@ -11,6 +12,7 @@ import settting from './settting'
 const whiteList = ['/login']
 const userStore = useUserStore(pinia)
 const permissionStore = usePermissionStore(pinia)
+const tagViewsStore = useTagViewsStore(pinia)
 
 router.beforeEach(async (to, from, next) => {
   nprogress.start()
@@ -50,5 +52,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.afterEach((to, from, next) => {
+  const regexp = /^\/redirect/
+  tagViewsStore.refreshing = !regexp.test(from.path)
   nprogress.done()
 })

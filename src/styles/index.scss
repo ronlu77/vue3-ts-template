@@ -1,9 +1,8 @@
 // 引入清除默认样式
 @import './reset.scss';
 @import './transition.scss';
-@import './variable.scss';
 @import './element-ui.scss';
-@import './dark.scss';
+@import './variable.module.scss';
 
 ::-webkit-scrollbar {
     width: 10px;
@@ -15,12 +14,10 @@
 
 ::-webkit-scrollbar-thumb {
     width: 10px;
-    background-color: $base-menu-background;
+    background-color: $menu-background;
     border-radius: 6px;
 }
-
 
 a {
     text-decoration: none;
 }
-

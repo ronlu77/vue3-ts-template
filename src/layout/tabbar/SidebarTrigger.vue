@@ -29,7 +29,7 @@ function toggleCollpase() {
   cursor: pointer;
 
   &:hover {
-    background: #f9f9f9;
+    background: $hover-color;
   }
 }
 </style>

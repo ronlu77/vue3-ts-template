@@ -9,8 +9,8 @@
           :collapse="isCollapse"
           :unique-opened="true"
           :collapse-transition="false"
-          text-color="#9292AE"
-          background-color="#F1F1FB"
+          :text-color="textColor"
+          :background-color="backgroundColor"
         >
           <MenuItem
             v-for="route in menuList"
@@ -41,24 +41,26 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
 import { usePermissionStore } from '@/store/modules/permission'
+import variables from '@/styles/variable.module.scss'
 
 const route = useRoute()
 const isCollapse = computed(() => !useAppStore().opened)
 const menuList = computed(() => usePermissionStore().frontMenuList)
 const currentActiveMenuPath = computed(() => route.path.toString())
+const backgroundColor = computed(() => variables.menuBackgroundColor)
+const textColor = computed(() => variables.textColor)
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .layout-container {
   width: 100%;
   height: 100vh;
-  background: $background-color;
   overflow: hidden;
 
   .layout-sider {
     width: $base-menu-width;
     height: 100vh;
-    background: $base-menu-background;
+    background: $menu-background;
     transition: all 0.3s ease-in;
   }
 

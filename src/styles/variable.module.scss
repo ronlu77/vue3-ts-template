@@ -1,0 +1,5 @@
+// scss 抛出变量，可以在js中使用
+:export {
+    menuBackgroundColor: $menu-background;
+    textColor: $text-color;
+}

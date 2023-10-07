@@ -11,15 +11,17 @@
   </div>
 </template>
 <script setup lang="ts" name="SvgIcon">
+import variables from '@/styles/variable.module.scss'
+
 interface Props {
   name: string
   size: number | string
   color?: string
 }
 
-// 使用withDefaults编译宏来设置defineProps默认值
+// 使用 withDefaults 编译宏来设置defineProps默认值
 withDefaults(defineProps<Props>(), {
-  color: '#9292AE',
+  color: variables.textColor,
 })
 </script>
 <style scoped>

@@ -11,9 +11,8 @@ import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // 引入全局注册 el-icon 组件插件
 import elementIcon from '@/assets/icons/index.ts'
-// 黑暗主题
+// element-plus@2.2.0 黑暗主题颜色
 import 'element-plus/theme-chalk/dark/css-vars.css'
-// import './styles/dark/css-vars.css'
 
 // svg插件需要配置代码
 import 'virtual:svg-icons-register'

@@ -27,6 +27,7 @@
     </div>
     <div class="tag-view-right">
       <SvgIcon
+        ref="refSvg"
         class="svg-icon-item"
         name="refresh"
         size="12"
@@ -79,6 +80,7 @@ const tagViewsStore = useTagViewsStore()
 const tagViewList = computed(() => tagViewsStore.tagViewList)
 const isVisible = ref(false) // 控制标签操作卡片显隐
 let isFirstRender = true // 是否为首次组件渲染
+let refreAnimation = null // 刷新动画对象
 
 // 监听路由变化，路由变化了添加到 tagViewList 中
 watch(route, () => {
@@ -87,6 +89,15 @@ watch(route, () => {
   tagViewsStore.addTagView(Object.assign({}, route))
   setCurrentTagView()
 })
+
+watch(
+  () => tagViewsStore.refreshing,
+  (newVal, oldVal) => {
+    if (!newVal) {
+      refreAnimation.cancel()
+    }
+  },
+)
 
 // 判断tag view 是否为当前路由
 const isActive = (tag: any): boolean => {
@@ -148,9 +159,15 @@ function handleCloseTagView(tagView: any) {
 }
 
 function handleRefreshPage() {
+  tagViewsStore.refreshing = true
   tagViewsStore.refreshPage(route)
-
-  // todo 添加svg-icon 旋转（目前思路通过事件总线实现）
+  // svg 旋转，刷新结束停止旋转
+  refreAnimation = proxy.$refs.refSvg['$el']
+    .querySelector('svg')
+    .animate([{ transform: 'rotate(0)' }, { transform: 'rotate(360deg)' }], {
+      duration: 800,
+      iterations: Infinity,
+    })
 }
 
 // 设置当前
@@ -245,7 +262,6 @@ onBeforeUnmount(() => {
     border-radius: 4px 4px 0 0;
     border: 1px solid var(--el-border-color);
     border-bottom: none;
-    color: $text-color;
 
     .tag_view__body {
       display: flex;

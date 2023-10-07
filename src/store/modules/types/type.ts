@@ -6,3 +6,8 @@ export interface UserStore {
   username: string
   avatar: string
 }
+
+export interface SettingState {
+  theme: string
+  language: string
+}

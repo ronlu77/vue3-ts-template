@@ -121,13 +121,13 @@ onMounted(() => {
   border-radius: 6px;
   box-shadow: 0 0 6px rgba($color: #000000, $alpha: 0.3);
   background: $background-color;
-  color: $text-color;
 
   .option__item {
     display: flex;
     align-items: center;
     min-height: 22px;
     padding: 6px;
+    color: $text-color;
 
     &:hover {
       background: $hover-color;

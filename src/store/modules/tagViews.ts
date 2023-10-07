@@ -8,6 +8,7 @@ interface State {
   activeTagView: any
   MaxLenth: number
   BlockOrder: string[] // 黑名单，不显示在标签栏
+  refreshing: boolean
 }
 
 const findTagViewIndex = (list: any, node: any): number => {
@@ -31,6 +32,7 @@ export const useTagViewsStore = defineStore('tagViews', {
     cacheTagList: [],
     MaxLenth: 20,
     BlockOrder: ['404'],
+    refreshing: false,
   }),
   actions: {
     addTagView(tag: RouteLocationNormalized) {
