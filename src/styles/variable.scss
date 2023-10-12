@@ -13,7 +13,7 @@ html {
         --text-color: #9292AE;
         --background-color: #FFF;
         --menu-background: #F1F1FB;
-        --hover-color: #E8F7FC;
+        --hover-color: #F3F3FB;
         --active-color: #4DABFF;
     }
 }
@@ -31,5 +31,6 @@ $base-menu-hiden-width: 60px;
 
 // 顶部导航的高度
 $base-tabbar-height: 70px;
+$base-nav-height: 40px;
 $base-logo-height: 60px;
 $tag-view-height: 30px;

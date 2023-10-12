@@ -1,20 +1,55 @@
 <template>
-  <el-drawer v-model="useVisible" title="项目配置" size="20%" destroy-on-close append-to-body>
+  <el-drawer
+    v-model="useVisible"
+    title="项目配置"
+    size="20%"
+    destroy-on-close
+    append-to-body
+  >
     <div class="setting-drawer-main">
       <el-scrollbar>
         <div style="height: 1000px">
-          <el-divider>主题配置</el-divider>
-          <div>
-            <label for="">黑暗模式</label>
-            <el-switch v-model="isDark" inline-prompt active-text="dark" size="large" inactive-text="light"
-              @change="toggleDarkTheme" />
+          <el-divider><span class="t-size bold">主题配置</span></el-divider>
+          <div class="flex justify-between align-center">
+            <label class="l-size label" for="">黑暗模式</label>
+            <el-switch
+              v-model="isDark"
+              inline-prompt
+              :active-icon="Moon"
+              width="60"
+              size="large"
+              :inactive-icon="Sunny"
+              @change="toggleDarkTheme"
+            />
           </div>
-          <div>
-            <label for="">灰色模式</label>
-            <el-switch inline-prompt active-text="gray" size="large" inactive-text="light" />
+          <div class="flex justify-between align-center">
+            <label class="l-size label" for="">灰色模式</label>
+            <el-switch
+              v-model="isGray"
+              inline-prompt
+              active-text="开"
+              width="60"
+              size="large"
+              inactive-text="关"
+              @change="toggleGrayTheme"
+            />
           </div>
-          <el-divider>导航栏模式</el-divider>
-          <el-divider>界面功能</el-divider>
+          <el-divider><span class="t-size bold">导航栏模式</span></el-divider>
+          <el-divider><span class="t-size bold">标签栏</span></el-divider>
+          <div class="flex justify-between align-center">
+            <label class="l-size label" for="">是否启用</label>
+            <el-switch
+              v-model="showTabber"
+              inline-prompt
+              active-text="开"
+              width="60"
+              size="large"
+              inactive-text="关"
+              @change="toggleSetTabbar"
+            />
+          </div>
+          <el-divider><span class="t-size bold">界面功能</span></el-divider>
+          <div class="box"></div>
           <el-form>
             <el-row>
               <el-col>
@@ -41,9 +76,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useDark, useToggle } from '@vueuse/core'
 import useSettingStore from '@/store/modules/setting'
+import { Sunny, Moon } from '@element-plus/icons-vue'
 
 interface Props {
   visible: boolean
@@ -56,33 +92,36 @@ const useVisible = computed({
   set: (val): void => emit('update:visible', val),
 })
 const settingStore = useSettingStore()
-// const theme = ref<boolean>(true)
+const showTabber = ref(true)
+
 const isDark = useDark({
+  // 自定义暗黑主题class
   valueDark: 'dark',
+  // 自定义默认主题class
   valueLight: 'light',
 })
-
-// useDark({
-//   // 存储到localStorage/sessionStorage中的Key 根据自己的需求更改
-//   // storageKey: 'useDarkKEY',
-//   // 暗黑class名字
-//   valueDark: 'dark',
-//   // 高亮class名字
-//   valueLight: 'light',
-// })
-// const toggleDark = useToggle(isDark)
+const isGray = ref(false)
+const color = ref('#999')
 
 function toggleDarkTheme(val: boolean) {
-  console.log('isDark', isDark)
   const theme = val ? 'dark' : 'light'
   settingStore.setTheme(theme)
-  // toggleDark()
 }
 
-onMounted(() => {
-  // localStorage.setItem('useDarkKEY', 'light')
-})
-// const theme = ref('light')
+function toggleGrayTheme(val: boolean) {
+  color.value = val ? '#999' : '#151'
+  console.log('test', color.value)
+}
+
+function toggleSetTabbar(val: boolean) {
+  settingStore.setTagView(val)
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.box {
+  width: 20px;
+  height: 20px;
+  color: v-bind(color);
+}
+</style>

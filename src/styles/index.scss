@@ -20,4 +20,37 @@
 
 a {
     text-decoration: none;
+    color: $text-color;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.bolder {
+    font-weight: bolder;
+}
+
+.t-size {
+    font-size: 16px;
+}
+
+.l-size {
+    font-size: 14px;
+}
+
+.label {
+    color: $text-color;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;    
+}
+
+.align-center {
+    align-items: center;
 }
