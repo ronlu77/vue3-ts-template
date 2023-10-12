@@ -32,7 +32,7 @@ router.beforeEach(async (to, from, next) => {
           await userStore.getUserInfo(token)
           // todo 根据用户权限动态加载路由（目前直接加载常量路由）
           permissionStore.setFontMenuList()
-          next({ path: '/' })
+          next()
         } catch (err) {
           //  一般在此处处理 token 过期的情况
           userStore.userLogout()
