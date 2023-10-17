@@ -1,0 +1,17 @@
+{
+  "mockSchema": {
+    "x-component-props": {},
+    "properties": {
+      "xxx": {
+        "title": "vin",
+        "widthMode": "auto",
+        "x-display": true,
+        "x-component": "text",
+        "x-component-props": {
+          "fixed": false,
+          "width": 200
+        }
+      }
+    }
+  }
+}

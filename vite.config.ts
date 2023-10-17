@@ -1,6 +1,8 @@
 // https://vitejs.dev/config/
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+// 引入vuejsx支持插件
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import path from 'path'
 // 引入 svg 所需要用到的插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
@@ -26,15 +28,18 @@ export default defineConfig(({ command, mode }) => {
     },
     plugins: [
       vue(),
+      vueJsx(),
       createSvgIconsPlugin({
         // 指定需要缓存的图标文件夹
         iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
+        // 指定svg图标的格式
         symbolId: 'icon-[name]',
       }),
       viteMockServe({
         mockPath: 'mock',
         localEnabled: command === 'serve', // 保证开发阶段可以使用mock接口
       }),
+      // 处理使用setup无法设置name问题
       vueSetupExtend(),
     ],
     resolve: {

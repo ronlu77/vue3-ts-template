@@ -6,7 +6,8 @@
       :aria-hidden="true"
       :style="{ fontSize: size + 'px', color }"
     >
-      <use :href="`#icon-${name}`"></use>
+      <!-- xline:href 属性在SVG2 中已经废弃，可以同时使用来兼容低版本 -->
+      <use :href="`#icon-${name}`" :xline:href="`#icon-${name}`"></use>
     </svg>
   </div>
 </template>
