@@ -194,9 +194,7 @@ function setFixedColumns(list, limits) {
 }
 
 /** 表格刷新 */
-function resetTable() {
-
-}
+function resetTable() {}
 </script>
 <style lang="scss" scoped>
 .navtool-setting-card {

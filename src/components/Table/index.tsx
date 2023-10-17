@@ -9,7 +9,7 @@ export default defineComponent({
     sourceData: { type: Array, default: () => [] }, // 当tableType 为0时设置的静态数据集合；
     schema: { type: Object, required: true }, // ltable 的JSON对象
     tableHeight: { type: [String, Number], default: 300 }, // 自定义ltable高度
-    navtool: { type: Boolean, default: true }, // 开启l-table顶部工具导航
+    navtool: { type: Boolean, default: false }, // 开启l-table顶部工具导航
   },
   emit: [],
   setup(props, context) {
