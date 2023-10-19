@@ -1,11 +1,13 @@
 import SvgIcon from '@/components/SvgIcon/index.vue'
-import Pagination from '@/components/Pagination/index.vue'
-import LfTable from '@/components/Table/index.tsx'
+import LPagination from '@/components/Pagination/index.vue'
+import LTable from '@/components/Table/index.tsx'
+import LTableList from '@/components/TableList/index.tsx'
 
 const AllGlobalComponent: any = {
   SvgIcon,
-  Pagination,
-  LfTable,
+  LPagination,
+  LTable,
+  LTableList,
 }
 
 // 暴露全局组件注册插件对象

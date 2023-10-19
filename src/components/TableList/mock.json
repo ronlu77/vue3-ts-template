@@ -1,0 +1,34 @@
+{
+    "list": {
+        "type": "string",
+        "distance": true,
+        "requestSchema": {
+            "requestUrl": "",
+            "method": "get"
+        },
+        "displayPagination": true,
+        "tableSchema": {
+            "x-component-props": {},
+            "properties": {
+                "title" : {
+                    "title": "列01",
+                    "x-component": true,
+                    "x-component-props": {
+                    }
+                }
+            }
+        }
+    },
+    "requestData": {
+        "totalNumber": 200,
+        "rows": [
+            {
+                "key01": "value01",
+                "key02": "value02",
+                "key03": "value03",
+                "key04": "value04",
+                "key05": "value05"
+            }
+        ]
+    }
+}

@@ -1,12 +1,16 @@
 <template>
-  <el-pagination
-    v-model:current-page="useCurrentPage"
-    v-model:page-size="usePageSize"
-    v-bind="useAttributes"
-  />
+  <div class="pagination__wrapper">
+    <el-pagination
+      v-model:current-page="useCurrentPage"
+      v-model:page-size="usePageSize"
+      v-bind="useAttributes"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
 </template>
 <script setup lang="ts">
-import { ref, useAttrs, computed, watch } from 'vue'
+import { ref, useAttrs, computed } from 'vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -20,39 +24,40 @@ const props = defineProps({
 const emits = defineEmits([
   'update:currentPage',
   'update:pageSize',
-  'restartData',
+  'paginationChange',
 ])
 // ! 不能直接对prop属性进行 v-model绑定
 const useCurrentPage = computed({
   get: () => props.currentPage,
-  set: (val) => {
-    emits('update:currentPage', val)
-  },
+  set: () => ({}),
 })
 const usePageSize = computed({
   get: () => props.pageSize,
-  set: (val) => {
-    emits('update:pageSize', val)
-  },
+  set: () => ({}),
 })
 
 const defaultProps = {
   total: 0,
   size: 10,
   'page-sizes': [10, 30, 50, 100],
-  layout: 'sizes, prev, pager, next, ->, jumper, total',
+  layout: 'jumper, total, ->, prev, pager, next, sizes',
   disabled: false,
   background: true,
+  small: true,
 }
 const useAttributes = Object.assign({}, defaultProps, attrs)
 
-watch(useCurrentPage, () => {
-  emits('restartData')
-})
+function handleSizeChange(val) {
+  emits('paginationChange', { key: 'pageSize', val })
+}
 
-watch(usePageSize, () => {
-  emits('restartData')
-})
+function handleCurrentChange(val) {
+  emits('paginationChange', { key: 'currentPage', val })
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.pagination__wrapper {
+  margin: 10px 0;
+}
+</style>

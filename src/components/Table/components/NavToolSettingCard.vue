@@ -62,9 +62,9 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
 import { ref, computed } from 'vue'
-import { CD } from '../utils'
+import { CD } from '@/utils/schema'
 import { Refresh } from '@element-plus/icons-vue'
-import { cloneDeep, isUndefined } from 'lodash-es'
+import { isUndefined } from 'lodash-es'
 
 interface Props {
   list: object[] | any

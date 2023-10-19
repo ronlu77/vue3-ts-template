@@ -15,7 +15,7 @@
 </template>
 <script setup lang="ts">
 import NavToolSettingCard from './NavToolSettingCard.vue'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { cloneDeep } from 'lodash-es'
 
 interface Props {

@@ -19,11 +19,8 @@ const key = computed(() => props.lkey).value
 const kvpEnum = computed(() => props.schema.properties[key].enum).value
 const finalValue = ref('')
 
-console.log('props data is', props.lkey, props.schema, props.scope)
-
 if (!isUndefined(kvpEnum)) {
   const kvp = find(kvpEnum, { value: props.scope.row[key] })
-  console.log('kvp', kvp)
   finalValue.value = isUndefined(kvp) ? '' : kvp.label
 }
 </script>

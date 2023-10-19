@@ -1,4 +1,4 @@
-import { TextTag, TextDict, NavTools } from './src'
+import { TextTag, TextDict, NavTools } from './components'
 import { ref, computed, watch, defineComponent } from 'vue'
 import { CD } from './utils'
 import { cloneDeep, isUndefined } from 'lodash-es'
@@ -6,9 +6,10 @@ import { cloneDeep, isUndefined } from 'lodash-es'
 export default defineComponent({
   name: 'LTable',
   props: {
-    sourceData: { type: Array, default: () => [] }, // 当tableType 为0时设置的静态数据集合；
+    sourceData: { type: Array, default: () => [] }, // 当tableType 为 0 时设置的静态数据集合；
     schema: { type: Object, required: true }, // ltable 的JSON对象
     tableHeight: { type: [String, Number], default: 300 }, // 自定义ltable高度
+    loading: { type: Boolean, default: false },
     navtool: { type: Boolean, default: false }, // 开启l-table顶部工具导航
   },
   emit: [],
@@ -72,7 +73,9 @@ export default defineComponent({
       return finalSchema
     }
 
-    const useSchema = ref(cloneDeep(Object.assign({}, initSchema(props.schema, CD))))
+    const useSchema = ref(
+      cloneDeep(Object.assign({}, initSchema(props.schema, CD))),
+    )
 
     /** 处理ltable 插槽列 */
     function renderSlots(slots, tableColumnList) {
@@ -225,7 +228,7 @@ export default defineComponent({
     }
 
     const tableSelection = () => {
-      console.log('selection', elTableRef.value.getSelectionRows())
+      return elTableRef.value.getSelectionRows()
     }
 
     expose({
@@ -241,6 +244,7 @@ export default defineComponent({
         <el-table
           ref={elTableRef}
           data={useTableData.value}
+          v-loading={props.loading}
           {...renderTableMainProps.value}
         >
           {renderTableColumns}
@@ -249,7 +253,7 @@ export default defineComponent({
       const tableNav = props.navtool ? (
         <NavTools schema={useSchema.value}></NavTools>
       ) : (
-        <></>
+        ''
       )
       return (
         <div>

@@ -21,7 +21,7 @@ const props = defineProps<Props>()
 const key = computed(() => props.lkey).value
 const kvpEnum = computed(() => props.schema.properties[key].enum).value
 const contentStr = ref('')
-const badgeType = ref('')
+const badgeType = ref('info')
 
 if (!isUndefined(kvpEnum)) {
   const kvp = find(kvpEnum, { value: props.scope.row[key] })
