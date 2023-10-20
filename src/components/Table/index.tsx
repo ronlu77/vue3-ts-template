@@ -1,4 +1,4 @@
-import { TextTag, TextDict, NavTools } from './components'
+import { TextTag, TextDict, NavTools } from './src'
 import { ref, computed, watch, defineComponent } from 'vue'
 import { CD } from './utils'
 import { cloneDeep, isUndefined } from 'lodash-es'

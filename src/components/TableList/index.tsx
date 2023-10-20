@@ -18,7 +18,6 @@ export default defineComponent({
   },
   emit: [],
   setup(props, { emit, slots, expose }) {
-    console.log('setup run', new Date().getTime())
     const lTableRef = ref(null)
     const defaulTableListProps = {
       distance: props.distance,
