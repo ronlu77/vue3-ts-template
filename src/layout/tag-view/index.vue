@@ -7,6 +7,7 @@
           <router-link
             class="tag-view__item"
             v-for="(item, index) in tagViewList"
+            :class="isActive(item) ? 'active' : ''"
             :key="index"
             :to="item.path"
             @click="toScrollCurrentTagView()"
@@ -44,7 +45,6 @@
         <TagViewOptionCard
           class="option-card"
           ref="tagViewOption"
-          @remove-active-tag="setCurrentTagView"
           @close-card="handleCardClose"
         />
       </div>
@@ -66,12 +66,12 @@ import {
   computed,
   onBeforeMount,
   onBeforeUnmount,
+  onMounted,
   watch,
-  nextTick,
   getCurrentInstance,
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useTagViewsStore } from '@/store/modules/tagViews'
+import useTagViewsStore from '@/store/modules/tagViews'
 
 const { proxy, appContext } = getCurrentInstance()
 const route = useRoute()
@@ -82,26 +82,26 @@ const isVisible = ref(false) // 控制标签操作卡片显隐
 let isFirstRender = true // 是否为首次组件渲染
 let refreAnimation = null // 刷新动画对象
 
-// 监听路由变化，路由变化了添加到 tagViewList 中
-watch(route, () => {
+// 监听路由变化，路由变化了添加到 tagViewList 中, 除用于实现刷新页面效果的 /redirect/:path(.*) 路由外
+watch(route, (newVal) => {
   const regexp = /^\/redirect/
-  if (regexp.test(route.path)) return
-  tagViewsStore.addTagView(Object.assign({}, route))
-  setCurrentTagView()
+  if (regexp.test(newVal.path)) return
+  //！需要拷贝route， 否则再次添加, 路由改变将引起tagViewList中上传存储的数据改变，导致不会新增 tagView, 而是更改上次添加的 tagview
+  tagViewsStore.addTagView(JSON.parse(JSON.stringify(newVal)))
 })
 
 watch(
   () => tagViewsStore.refreshing,
-  (newVal, oldVal) => {
+  (newVal) => {
     if (!newVal) {
-      refreAnimation.cancel()
+      refreAnimation && refreAnimation.cancel()
     }
   },
 )
 
 // 判断tag view 是否为当前路由
 const isActive = (tag: any): boolean => {
-  return tag.fullPath === route.fullPath
+  return tag.path === route.path
 }
 
 const isAffix = (tag: any) => {
@@ -122,29 +122,11 @@ const findTagViewIndex = (tagViewList: Array<any>, tagView: any): number => {
   return tagViewIndex
 }
 
-// 初始化
-function initTagView() {
-  tagViewsStore.addTagView(Object.assign({}, route))
-  setCurrentTagView()
-
-  // 注意冒泡多次触发click事件
-  document.body.addEventListener('click', (event) => {
-    event.stopPropagation()
-    if (isVisible.value && !isFirstRender) {
-      const option_dom = proxy.$refs.tagViewOption['$el']
-      if (!option_dom.contains(event.target)) {
-        isVisible.value = false
-      }
-    }
-    isFirstRender = false
-  })
-}
-
 //todo 滚动到当前 tag view
 function toScrollCurrentTagView() {
   const CONTAINER = document.querySelector('.tag-view-container')
   const CONTAINER_WIDTH = CONTAINER.clientWidth
-  console.log(CONTAINER_WIDTH, CONTAINER.clientLeft, proxy.$refs.elScrollbar)
+  // console.log(CONTAINER_WIDTH, CONTAINER.clientLeft, proxy.$refs.elScrollbar)
 }
 
 // 删除 tag view
@@ -152,8 +134,9 @@ function handleCloseTagView(tagView: any) {
   const tagViewIndex = findTagViewIndex(tagViewList.value, tagView)
   const lastIndex = tagViewIndex - 1
   if (isActive(tagView)) {
-    router.push({ path: tagViewList.value[lastIndex].fullPath })
-    tagViewsStore.activeTagView = tagViewList.value[lastIndex]
+    lastIndex !== -1
+      ? router.push({ path: tagViewList.value[lastIndex]['fullPath'] })
+      : router.push({ path: tagViewList.value[tagViewIndex + 1]['fullPath'] })
   }
   tagViewsStore.deleteTagView(tagView)
 }
@@ -168,19 +151,6 @@ function handleRefreshPage() {
       duration: 800,
       iterations: Infinity,
     })
-}
-
-// 设置当前
-function setCurrentTagView() {
-  nextTick(() => {
-    const tagViewDomList = document
-      .getElementsByClassName('tag-view-container')[0]
-      .getElementsByClassName('router-link-active')
-    if (!tagViewDomList.length || tagViewDomList.length !== 1) return
-    const activeTagView = tagViewDomList[0]
-    activeTagView.classList.add('active')
-    tagViewsStore.activeTagView = route
-  })
 }
 
 watch(isVisible, (newVal, oldVal) => {
@@ -203,14 +173,39 @@ function toToggleMainContentFullScreen() {
   isVisible.value = false
 }
 
+// 初始化
+function initTagView() {
+  // 注意冒泡多次触发click事件
+  document.body.addEventListener('click', (event) => {
+    event.stopPropagation()
+    if (isVisible.value && !isFirstRender) {
+      const option_dom = proxy.$refs.tagViewOption['$el']
+      if (!option_dom.contains(event.target)) {
+        isVisible.value = false
+      }
+    }
+    isFirstRender = false
+  })
+}
+
 onBeforeMount(() => {
   initTagView()
 })
 
 onBeforeUnmount(() => {
   document.body.removeEventListener('click', () => {
-    console.log('remove')
+    // console.log('remove')
   })
+})
+
+onMounted(() => {
+  if (localStorage.getItem('tag__info')) {
+    tagViewsStore.$state = JSON.parse(localStorage.getItem('tag__info'))
+  } else {
+    // 本地存储 tag 信息
+    localStorage.setItem('tag__info', JSON.stringify(tagViewsStore.$state))
+  }
+  tagViewsStore.addTagView(Object.assign({}, route))
 })
 </script>
 

@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <router-view v-slot="{ Component, route }">
+      <!-- transition 组件不可包裹多个根元素 -->
       <transition name="fade-transform" mode="out-in">
         <keep-alive :include="cacheViewList">
           <component :is="Component" :key="route.path"></component>
@@ -15,7 +16,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useTagViewsStore } from '@/store/modules/tagViews'
+import useTagViewsStore from '@/store/modules/tagViews'
 
 const currentYear = computed(() => new Date().getFullYear())
 const cacheViewList = computed(() => useTagViewsStore().cacheTagList)
@@ -27,6 +28,7 @@ const cacheViewList = computed(() => useTagViewsStore().cacheTagList)
   height: 100%;
   padding: 16px;
 }
+
 .copyright {
   position: fixed;
   bottom: 10px;

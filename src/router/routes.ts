@@ -1,4 +1,3 @@
-import { AppRouteRecordRow } from './types.ts'
 // 对外暴露常量路由
 import Layout from '@/layout/index.vue'
 /**
@@ -60,8 +59,22 @@ export const constantRoutes = [
     hidden: true,
     children: [
       {
-        path: '/redirect/:path(.*)',
+        path: '/redirect/:matchPath(.*)',
         component: () => import('@/views/redirect/index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/functionality',
+    component: Layout,
+    meta: { title: '功能', icon: 'file' },
+    children: [
+      {
+        path: 'sessiontimeout',
+        name: 'Sessiontimeout',
+        component: () =>
+          import('@/views/functionality/sessiontimeout/index.vue'),
+        meta: { title: '用户过期', icon: '' },
       },
     ],
   },

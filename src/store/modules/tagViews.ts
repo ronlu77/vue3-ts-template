@@ -1,37 +1,23 @@
 import { defineStore } from 'pinia'
 import { RouteLocationNormalized } from 'vue-router'
 import router from '@/router'
+import { cloneDeep } from 'lodash-es'
 
 interface State {
   tagViewList: []
   cacheTagList: string[]
-  activeTagView: any
   MaxLenth: number
   BlockOrder: string[] // 黑名单，不显示在标签栏
   refreshing: boolean
 }
 
-const findTagViewIndex = (list: any, node: any): number => {
-  const _index = -1
-  let idx = 0
-  if (!list.length) return _index
-  while (idx < list.length) {
-    if (list[idx].fullPath === node.fullPath) {
-      return idx
-    }
-    idx++
-  }
-  return _index
-}
-
 //todo  目前都没有考虑除首页外的 affix 情况
-export const useTagViewsStore = defineStore('tagViews', {
+const useTagViewsStore = defineStore('tagViews', {
   state: (): State => ({
     tagViewList: [],
-    activeTagView: {},
     cacheTagList: [],
     MaxLenth: 20,
-    BlockOrder: ['404'],
+    BlockOrder: ['404', 'login'],
     refreshing: false,
   }),
   actions: {
@@ -39,9 +25,9 @@ export const useTagViewsStore = defineStore('tagViews', {
       const tagIndex = this.tagViewList.findIndex(
         (item: RouteLocationNormalized) => item.fullPath === tag.fullPath,
       )
-      // 添加缓存 chacheTag
+      if (this.BlockOrder.includes(tag.name)) return
+      if (tagIndex > -1) return
       this.addCacheTag(tag)
-      if (tagIndex > -1 || this.BlockOrder.includes(tag.name)) return
       this.tagViewList.push(tag)
     },
     deleteTagView(tag: RouteLocationNormalized) {
@@ -54,54 +40,48 @@ export const useTagViewsStore = defineStore('tagViews', {
     },
     refreshPage(route: RouteLocationNormalized) {
       const { fullPath } = route
+      // 需要从缓存名单中清除，否则也没数据没有清空
       const cacheIndex = this.cacheTagList.indexOf(route.name)
       if (cacheIndex !== -1) {
         this.cacheTagList.splice(cacheIndex, 1)
       }
       router.replace('/redirect' + fullPath)
     },
-    closeCurrentTagView() {
-      if (
-        this.tagViewList.length === 1 ||
-        (this.activeTagView.meta && this.activeTagView.meta.affix)
-      )
-        return
-      // clear cache
-      this.deleteCacheTag(this.activeTagView.name)
-      const index = this.getActiveTagViewIndex()
+    closeCurrentTagView(route) {
+      const index = this.getActiveTagViewIndex(route)
+      this.deleteCacheTag(route.name)
       this.tagViewList.splice(index, 1)
-      const { fullPath, params } = this.tagViewList[index - 1]
+      // 删除当前active 路由后跳转下一个active 路由
+      const nextRoute =
+        index === 0 ? this.tagViewList[index + 1] : this.tagViewList[index - 1]
+      const { fullPath, params } = nextRoute
       router.push({ path: fullPath, params })
     },
-    closeLeftTagView() {
-      const index = this.getActiveTagViewIndex()
+    closeLeftTagView(route) {
+      const index = this.getActiveTagViewIndex(route)
       this.deleteCacheTag(this.tagViewList[index - 1].name)
       this.tagViewList.splice(index - 1, 1)
     },
-    closeRightTagView() {
-      const index = this.getActiveTagViewIndex()
+    closeRightTagView(route) {
+      const index = this.getActiveTagViewIndex(route)
       this.deleteCacheTag(this.tagViewList[index + 1].name)
       this.tagViewList.splice(index + 1, 1)
     },
     closeAllTagView() {
-      const affixList = this.tagViewList.filter(
-        (item: RouteLocationNormalized) => item.meta && item.meta.affix,
-      )
+      const affixList = this.gainAffixTagView()
       this.tagViewList = affixList
-      router.push('/')
-      this.cacheTagList = ['Dashboard']
+      this.cacheTagList = this.tagViewList.map((item) => item.name)
+      router.push('/') //* 暂定
     },
-    closeOtherTagView() {
-      const affixList = this.tagViewList.filter(
-        (item: RouteLocationNormalized) =>
-          (item.meta && item.meta.affix) ||
-          item.fullPath === this.activeTagView.fullPath,
-      )
+    closeOtherTagView(route) {
+      const affixList = cloneDeep(this.gainAffixTagView())
+      const index = affixList.findIndex((item) => item.path === route.path)
+      index === -1 && affixList.push(Object.assign({}, route))
       this.tagViewList = affixList
-      this.cacheTagList = affixList
+      this.cacheTagList = affixList.map((item) => item.name)
     },
-    getActiveTagViewIndex(): number {
-      return findTagViewIndex(this.tagViewList, this.activeTagView)
+    getActiveTagViewIndex(route: any): number {
+      return this.tagViewList.findIndex((item) => item.path === route.path)
     },
     addCacheTag(route: RouteLocationNormalized) {
       if (this.cacheTagList.includes(route.name)) return
@@ -109,9 +89,15 @@ export const useTagViewsStore = defineStore('tagViews', {
     },
     deleteCacheTag(name: string) {
       const cacheIndex = this.cacheTagList.indexOf(name)
-      if (cacheIndex !== -1 && !this.BlockOrder.includes(name)) {
+      if (cacheIndex !== -1) {
         this.cacheTagList.splice(cacheIndex, 1)
       }
     },
+    /** 获取 affix 路由 */
+    gainAffixTagView() {
+      return this.tagViewList.filter((item) => item.meta && item.meta.affix)
+    },
   },
 })
+
+export default useTagViewsStore
