@@ -23,10 +23,12 @@
     </div>
     <div class="layout-tabbar">
       <Tabbar />
-      <ScrollTagView />
+      <ScrollTagView v-if="showTag" />
     </div>
-    <div class="layout-main">
-      <AppMain />
+    <div class="layout-main" :class="showTag ? '' : 'show-tag'">
+      <el-scrollbar height="100%">
+        <AppMain />
+      </el-scrollbar>
     </div>
   </div>
 </template>
@@ -37,10 +39,11 @@ import MenuItem from './menu-item/index.vue'
 import ScrollTagView from './tag-view/index.vue'
 import Tabbar from './tabbar/index.vue'
 import AppMain from './main/index.vue'
-import { computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
 import { usePermissionStore } from '@/store/modules/permission'
+import useSettingStore from '@/store/modules/setting'
 import variables from '@/styles/variable.module.scss'
 
 const route = useRoute()
@@ -49,6 +52,15 @@ const menuList = computed(() => usePermissionStore().frontMenuList)
 const currentActiveMenuPath = computed(() => route.path.toString())
 const backgroundColor = computed(() => variables.menuBackgroundColor)
 const textColor = computed(() => variables.textColor)
+const settingStore = useSettingStore()
+const showTag = ref(true)
+
+watch(
+  () => settingStore.tag,
+  (newVal) => {
+    showTag.value = newVal
+  },
+)
 </script>
 
 <style lang="scss" scoped>
@@ -61,7 +73,7 @@ const textColor = computed(() => variables.textColor)
     width: $base-menu-width;
     height: 100vh;
     background: $menu-background;
-    transition: all 0.3s ease-in;
+    transition: width 0.3s ease-in;
   }
 
   :deep(.el-menu--collapse) {
@@ -77,7 +89,12 @@ const textColor = computed(() => variables.textColor)
     width: calc(100% - $base-menu-width);
     height: $base-tabbar-height;
     transition: all 0.3s ease-in;
-    z-index: 2;
+    z-index: 1;
+  }
+
+  .show-tag.layout-main {
+    top: $base-nav-height;
+    height: calc(100% - $base-nav-height);
   }
 
   .layout-main {
@@ -85,10 +102,11 @@ const textColor = computed(() => variables.textColor)
     left: $base-menu-width;
     top: $base-tabbar-height;
     width: calc(100% - $base-menu-width);
-    height: calc(100vh - $base-tabbar-height);
+    height: calc(100% - $base-tabbar-height);
     overflow: auto;
-    transition: all 0.3s ease-in;
+    transition: width 0.3s ease-in;
     z-index: 1;
+    background: $background-color;
   }
 
   &.hiden {

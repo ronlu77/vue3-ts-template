@@ -61,8 +61,8 @@
 </template>
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-import { ref, computed } from 'vue'
-import { CD } from '@/utils/schema'
+import { computed } from 'vue'
+import { CD } from '../utils'
 import { Refresh } from '@element-plus/icons-vue'
 import { isUndefined } from 'lodash-es'
 

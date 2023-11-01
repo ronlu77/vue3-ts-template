@@ -139,9 +139,9 @@ function handleActiveTabChange(tab: string) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid var(--el-border-color);
+  border: 1px solid $border-color;
   .notication_item + .notication_item {
-    border-top: 1px solid var(--el-border-color);
+    border-top: 1px solid $border-color;
   }
 
   .notication-box-pagination {

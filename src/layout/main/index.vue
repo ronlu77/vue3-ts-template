@@ -26,7 +26,7 @@ const cacheViewList = computed(() => useTagViewsStore().cacheTagList)
 .container {
   width: 100%;
   height: 100%;
-  padding: 16px;
+  padding: 5px 10px;
 }
 
 .copyright {
@@ -36,5 +36,6 @@ const cacheViewList = computed(() => useTagViewsStore().cacheTagList)
   right: 0;
   text-align: center;
   color: $text-color;
+  z-index: 999;
 }
 </style>

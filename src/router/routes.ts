@@ -70,11 +70,43 @@ export const constantRoutes = [
     meta: { title: '功能', icon: 'file' },
     children: [
       {
+        path: 'draggableDialog',
+        name: 'DraggableDialog',
+        component: () =>
+          import('@/views/functionality/draggableDialog/index.vue'),
+        meta: { title: '可拖拽弹窗', icon: '' },
+      },
+      {
+        path: 'copy',
+        name: 'Copy',
+        component: () => import('@/views/functionality/copy/index.vue'),
+        meta: { title: '剪切板', icon: '' },
+      },
+      {
+        path: 'ellipsis',
+        name: 'Ellipsis',
+        component: () => import('@/views/functionality/ellipsis/index.vue'),
+        meta: { title: '文本省略', icon: '' },
+      },
+      {
+        path: 'watermark',
+        name: 'Watermark',
+        component: () => import('@/views/functionality/watermark/index.vue'),
+        meta: { title: '水印设置', icon: '' },
+      },
+      {
         path: 'sessiontimeout',
         name: 'Sessiontimeout',
         component: () =>
           import('@/views/functionality/sessiontimeout/index.vue'),
         meta: { title: '用户过期', icon: '' },
+      },
+      {
+        path: 'monitorDevice',
+        name: 'MonitorDeviceInfomation',
+        component: () =>
+          import('@/views/functionality/monitorDeviceInfomation/index.vue'),
+        meta: { title: '设备监控', icon: '' },
       },
     ],
   },

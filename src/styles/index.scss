@@ -7,7 +7,7 @@
 ::-webkit-scrollbar {
     width: 10px;
 }
- 
+
 ::-webkit-scrollbar-track {
     background: $background-color;
 }
@@ -21,6 +21,14 @@
 a {
     text-decoration: none;
     color: $text-color;
+}
+
+body {
+    color: $text-color;
+}
+
+.container__inner {
+    height: 100%;
 }
 
 .bold {
@@ -48,7 +56,7 @@ a {
 }
 
 .justify-between {
-    justify-content: space-between;    
+    justify-content: space-between;
 }
 
 .align-center {

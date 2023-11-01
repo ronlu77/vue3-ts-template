@@ -34,7 +34,7 @@
               @change="toggleGrayTheme"
             />
           </div>
-          <el-divider><span class="t-size bold">导航栏模式</span></el-divider>
+          <!-- <el-divider><span class="t-size bold">导航栏模式</span></el-divider> -->
           <el-divider><span class="t-size bold">标签栏</span></el-divider>
           <div class="flex justify-between align-center">
             <label class="l-size label" for="">是否启用</label>

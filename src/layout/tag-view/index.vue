@@ -214,7 +214,7 @@ onMounted(() => {
   display: flex;
   align-items: flex-end;
   height: $tag-view-height;
-  border-bottom: 1px solid var(--el-border-color);
+  border-bottom: 1px solid $border-color;
   overflow: hidden;
 
   .tag-view-left {
@@ -238,7 +238,7 @@ onMounted(() => {
   flex: 1;
   height: 100%;
   cursor: pointer;
-  border-left: 1px solid var(--el-border-color);
+  border-left: 1px solid $border-color;
 
   &:hover {
     background: $hover-color;
@@ -255,7 +255,7 @@ onMounted(() => {
   .tag-view__item {
     flex-shrink: 0;
     border-radius: 4px 4px 0 0;
-    border: 1px solid var(--el-border-color);
+    border: 1px solid $border-color;
     border-bottom: none;
 
     .tag_view__body {

@@ -3,7 +3,7 @@ import router from './router'
 import pinia from './store'
 import useUserStore from './store/modules/user'
 import { usePermissionStore } from './store/modules/permission'
-import { useTagViewsStore } from './store/modules/tagViews'
+import useTagViewsStore from './store/modules/tagViews'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import settting from './settting'
@@ -27,7 +27,7 @@ router.beforeEach(async (to, from, next) => {
       if (userStore.username) {
         next()
       } else {
-        // 用户信息不存在的情况下，拉取用户信息, 跳转到首页
+        // 用户信息不存在的情况下，拉取用户信息
         try {
           await userStore.getUserInfo(token)
           // todo 根据用户权限动态加载路由（目前直接加载常量路由）
