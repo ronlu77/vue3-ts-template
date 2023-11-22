@@ -1,7 +1,7 @@
 import { TextTag, TextDict, NavTools } from './components'
-import { ref, computed, watch, defineComponent } from 'vue'
+import { ref, computed, watch, defineComponent, nextTick } from 'vue'
 import { CD } from './utils'
-import { cloneDeep, isUndefined } from 'lodash-es'
+import { cloneDeep, isUndefined, isNil } from 'lodash-es'
 
 export default defineComponent({
   name: 'LTable',
@@ -14,12 +14,14 @@ export default defineComponent({
   },
   emit: [],
   setup(props, context) {
+    const DefaultColumnWidth = 180
     const { emit, slots, expose } = context
     if (isUndefined(props.schema) || isUndefined(props.schema.properties)) {
       console.warn('ltable [schema] [schema.properties] is required.')
       return () => ''
     }
-    const elTableRef = ref(null)
+    const elTableRef = ref<HTMLElement>(null)
+    const tableMainRef = ref<HTMLElement>(null)
     const useTableData = computed(() => props.sourceData)
     const useTableHeight = computed(() => props.tableHeight)
 
@@ -35,9 +37,13 @@ export default defineComponent({
     // 最终渲染的ltable属性
     const renderTableMainProps = ref({})
 
-    renderTableMainProps.value = Object.assign({}, defaultTableComponentProps, props.schema[CD.component])
+    renderTableMainProps.value = Object.assign(
+      {},
+      defaultTableComponentProps,
+      props.schema[CD.component],
+    )
 
-    watch(useTableHeight, (newVal, oldVal) => {
+    watch(useTableHeight, (newVal) => {
       renderTableMainProps.value['height'] = newVal
     })
 
@@ -77,6 +83,16 @@ export default defineComponent({
       cloneDeep(Object.assign({}, initSchema(props.schema, CD))),
     )
 
+    /** 判断表格宽度和具体表格列宽总和之间的关系：
+     *  - 如果具体列宽总和大于表格宽度，则按照具体列宽来设置每一列宽度；
+     *  - 反之，如果设置了withMode: auto的列按照auto来设置，没有设置还是按照具体列宽来设置。
+     * */
+    function determineTableWidthSpill(schema): boolean {
+      if (isNil(tableMainRef.value)) return false
+      const scrollWidth = gainRealTableWidth(schema, CD)
+      return tableMainRef.value.offsetWidth < scrollWidth
+    }
+
     /** 处理ltable 插槽列 */
     function renderSlots(slots, tableColumnList) {
       const EnumSlotsList = ['indexTable', 'selectionTable', 'expandTable']
@@ -113,7 +129,12 @@ export default defineComponent({
                   <div class="l-table__expand">{slots[key](slotProps)}</div>
                 ),
               }
-              const item = <el-table-column type="expand" v-slots={vSlots}></el-table-column>
+              const item = (
+                <el-table-column
+                  type="expand"
+                  v-slots={vSlots}
+                ></el-table-column>
+              )
               tableColumnList.push(item)
               break
             }
@@ -141,11 +162,23 @@ export default defineComponent({
           break
         }
         case 'text.dict': {
-          vSlots['default'] = (slotProps) => (<TextDict lkey={key} schema={cloneDeep(useSchema.value)} scope={slotProps}></TextDict>)
+          vSlots['default'] = (slotProps) => (
+            <TextDict
+              lkey={key}
+              schema={cloneDeep(useSchema.value)}
+              scope={slotProps}
+            ></TextDict>
+          )
           break
         }
         case 'text.tag': {
-          vSlots['default'] = (slotProps) => (<TextTag lkey={key} schema={cloneDeep(useSchema.value)} scope={slotProps}></TextTag>)
+          vSlots['default'] = (slotProps) => (
+            <TextTag
+              lkey={key}
+              schema={cloneDeep(useSchema.value)}
+              scope={slotProps}
+            ></TextTag>
+          )
           break
         }
         default: {
@@ -162,7 +195,7 @@ export default defineComponent({
     }
 
     /** 渲染ltable-column display为true的列 */
-    function renderDisplayTableColumn(schema, CD) {
+    function renderDisplayTableColumn(schema: any, CD: any) {
       const tableColumnList = []
       const schemaPropKeys = Object.keys(schema.properties)
       // 优先处理内置插槽 ['indexTable', 'selectionTable', 'expandTable']
@@ -172,7 +205,7 @@ export default defineComponent({
         if (!filedColumn[CD.display]) return
         // ltable-column-item 默认原生组件属性
         const defaultColumnComponentProps = {
-          width: 200,
+          width: DefaultColumnWidth,
           sortable: false,
           showOverflowTooltip: true,
           align: 'left',
@@ -194,11 +227,15 @@ export default defineComponent({
               : filedColumn.title
             finalColumnProps['prop'] = key
           }
-          if (!isUndefined(filedColumn.widthMode)) {
-            delete finalColumnProps['width']
+          // 根据具体宽度是否溢出表格来处理 列宽取值
+          if (determineTableWidthSpill(schema)) {
+            // 1. 溢出 => 移除 widthMode: auto, 取默认宽度或自定义宽度
+          } else {
+            // 2.没有溢出 | widthMode: auto
+            !isUndefined(filedColumn.widthMode) &&
+              delete finalColumnProps['width']
           }
         }
-
         const EnumComponentTypeList = ['text', 'text.dict', 'text.tag']
         // 判断 x-component 为自定义插槽
         if (
@@ -220,7 +257,22 @@ export default defineComponent({
           tableColumnList.push(item)
         }
       })
+
       return tableColumnList
+    }
+
+    // 获取 l-table的具体宽度
+    const gainRealTableWidth = (schema: any, CD: any): number => {
+      let _width = 0
+      const { properties } = schema
+      // 过滤掉 x-display：false 项
+      const schemaPropKeys = Object.keys(properties).filter((k) => {
+        return isNil(properties[k][CD.display]) || properties[k][CD.display]
+      })
+      schemaPropKeys.forEach((key) => {
+        _width += properties[key][CD.componentProps].width || DefaultColumnWidth // 默认宽度
+      })
+      return _width
     }
 
     const refreshLayout = () => {
@@ -256,9 +308,9 @@ export default defineComponent({
         ''
       )
       return (
-        <div>
+        <div class="l-table__container">
           <div class="l-table__top l-table-nav">{tableNav}</div>
-          <div class="l-table__main">{renderTableMain}</div>
+          <div ref={tableMainRef} class="l-table__main">{renderTableMain}</div>
         </div>
       )
     }
