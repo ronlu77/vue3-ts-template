@@ -39,7 +39,6 @@ import {
   onMounted,
   computed,
   watchEffect,
-  nextTick,
   getCurrentInstance,
 } from 'vue'
 
@@ -67,7 +66,6 @@ const props = withDefaults(defineProps<Props>(), {
   tooltipPosition: 'top',
 })
 
-const { proxy } = getCurrentInstance()
 const LINE_HEIGHT = 20 // 设置文本域默认行高
 const textRef = ref<HTMLElement>(null)
 const tooltipRef = ref()
@@ -101,12 +99,7 @@ function determineEllipsis(): boolean {
 
 /** 跟新tooltip状态 */
 function updateTooltipStatus(): void {
-  // nexttick 无法获取最新的展开元素的高度
-  // nextTick(() => {
-  //   console.log('nexttick', determineEllipsis())
-  // })
   setTimeout(() => {
-    // console.log('setTimeout', determineEllipsis())
     const updateStatus = tooltipRef.value.updateStatus
     updateStatus(determineEllipsis())
   }, 200)
@@ -193,5 +186,6 @@ defineExpose({})
   }
 }
 
-.ellipsis-text__wrapper.has__tooltip {}
+.ellipsis-text__wrapper.has__tooltip {
+}
 </style>
