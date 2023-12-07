@@ -42,7 +42,7 @@ import AppMain from './main/index.vue'
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
-import { usePermissionStore } from '@/store/modules/permission'
+import usePermissionStore from '@/store/modules/permission'
 import useSettingStore from '@/store/modules/setting'
 import variables from '@/styles/variable.module.scss'
 
@@ -89,12 +89,12 @@ watch(
     width: calc(100% - $base-menu-width);
     height: $base-tabbar-height;
     transition: all 0.3s ease-in;
-    z-index: 1;
+    z-index: 2;
   }
 
   .show-tag.layout-main {
     top: $base-nav-height;
-    height: calc(100% - $base-nav-height);
+    height: calc(100vh - $base-nav-height);
   }
 
   .layout-main {
@@ -103,12 +103,11 @@ watch(
     top: $base-tabbar-height;
     width: calc(100% - $base-menu-width);
     height: calc(100% - $base-tabbar-height);
-    overflow: auto;
-    transition: width 0.3s ease-in;
-    z-index: 1;
+    transition: all 0.3s ease-in;
     background: $background-color;
   }
 
+  // 隐藏侧边栏
   &.hiden {
     .layout-sider {
       width: $base-menu-hiden-width;

@@ -2,7 +2,7 @@
 import router from './router'
 import pinia from './store'
 import useUserStore from './store/modules/user'
-import { usePermissionStore } from './store/modules/permission'
+import usePermissionStore from './store/modules/permission'
 import useTagViewsStore from './store/modules/tagViews'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'

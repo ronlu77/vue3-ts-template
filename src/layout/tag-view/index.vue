@@ -12,10 +12,10 @@
             :to="item.path"
             @click="toScrollCurrentTagView()"
           >
-            <div class="tag_view__body">
+            <div class="tag-view__body">
               <span class="tag_view_title">{{ item.meta.title }}</span>
               <el-icon
-                v-if="isAffix(item)"
+                v-if="!isAffix(item)"
                 class="icon-close"
                 @click.stop.prevent="handleCloseTagView(item)"
               >
@@ -44,6 +44,7 @@
         />
         <TagViewOptionCard
           class="option-card"
+          :class="{ active: isCardVisible }"
           ref="tagViewOption"
           @close-card="handleCardClose"
         />
@@ -63,6 +64,7 @@
 import TagViewOptionCard from './TagViewOptionCard.vue'
 import {
   ref,
+  reactive,
   computed,
   onBeforeMount,
   onBeforeUnmount,
@@ -72,13 +74,16 @@ import {
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import useTagViewsStore from '@/store/modules/tagViews'
+import usePermissionStore from '@/store/modules/permission'
+import { cloneDeep } from 'lodash-es'
 
 const { proxy, appContext } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
-const tagViewsStore = useTagViewsStore()
-const tagViewList = computed(() => tagViewsStore.tagViewList)
-const isVisible = ref(false) // 控制标签操作卡片显隐
+const { routes } = usePermissionStore()
+const tagStore = useTagViewsStore()
+const tagViewList = computed(() => tagStore.tagViewList) // 获取需要展示的tag集合
+const isCardVisible = ref<boolean>(false) // 控制标签操作卡片显隐
 let isFirstRender = true // 是否为首次组件渲染
 let refreAnimation = null // 刷新动画对象
 
@@ -86,12 +91,12 @@ let refreAnimation = null // 刷新动画对象
 watch(route, (newVal) => {
   const regexp = /^\/redirect/
   if (regexp.test(newVal.path)) return
-  //！需要拷贝route， 否则再次添加, 路由改变将引起tagViewList中上传存储的数据改变，导致不会新增 tagView, 而是更改上次添加的 tagview
-  tagViewsStore.addTagView(JSON.parse(JSON.stringify(newVal)))
+  //! 此处需要深拷贝 route！ 否则再次添加, 路由改变将引起 tagViewList 中上传存储的数据改变，导致不会新增 tagView, 而是更改上次添加的 tagview
+  tagStore.addTagView(cloneDeep(route))
 })
 
 watch(
-  () => tagViewsStore.refreshing,
+  () => tagStore.refreshing,
   (newVal) => {
     if (!newVal) {
       refreAnimation && refreAnimation.cancel()
@@ -104,8 +109,29 @@ const isActive = (tag: any): boolean => {
   return tag.path === route.path
 }
 
-const isAffix = (tag: any) => {
-  return tag.meta && !tag.meta.affix
+/** 判断是否为固定项 */
+const isAffix = (tag: any): boolean => {
+  return tag.meta && tag.meta.affix
+}
+
+/** 获取开启affix: true 路由项 */
+function filterAffixTags(routes: any[], basePath = ''): any[] {
+  let tags = []
+  routes.forEach((route: any) => {
+    if (route.meta && route.meta.affix) {
+      const fullPath = `${basePath}/${route.path}`.replace('//', '/')
+      tags.push({
+        fullPath,
+        path: fullPath,
+        meta: { ...route.meta },
+      })
+    }
+    if (route.children && route.children.length) {
+      const subTags = filterAffixTags(route.children, route.path)
+      tags = tags.concat(subTags)
+    }
+  })
+  return tags
 }
 
 // 寻找当前tagView在集合中的下标
@@ -123,14 +149,14 @@ const findTagViewIndex = (tagViewList: Array<any>, tagView: any): number => {
 }
 
 //todo 滚动到当前 tag view
-function toScrollCurrentTagView() {
+function toScrollCurrentTagView(): void {
   const CONTAINER = document.querySelector('.tag-view-container')
   const CONTAINER_WIDTH = CONTAINER.clientWidth
   // console.log(CONTAINER_WIDTH, CONTAINER.clientLeft, proxy.$refs.elScrollbar)
 }
 
 // 删除 tag view
-function handleCloseTagView(tagView: any) {
+function handleCloseTagView(tagView: any): void {
   const tagViewIndex = findTagViewIndex(tagViewList.value, tagView)
   const lastIndex = tagViewIndex - 1
   if (isActive(tagView)) {
@@ -138,12 +164,14 @@ function handleCloseTagView(tagView: any) {
       ? router.push({ path: tagViewList.value[lastIndex]['fullPath'] })
       : router.push({ path: tagViewList.value[tagViewIndex + 1]['fullPath'] })
   }
-  tagViewsStore.deleteTagView(tagView)
+  tagStore.deleteTagView(tagView)
 }
 
+//#region option zone
+/** 刷新时添加动画帧 */
 function handleRefreshPage() {
-  tagViewsStore.refreshing = true
-  tagViewsStore.refreshPage(route)
+  tagStore.refreshing = true
+  tagStore.refreshPage(route)
   // svg 旋转，刷新结束停止旋转
   refreAnimation = proxy.$refs.refSvg['$el']
     .querySelector('svg')
@@ -153,59 +181,55 @@ function handleRefreshPage() {
     })
 }
 
-watch(isVisible, (newVal, oldVal) => {
-  const optilon_dom = proxy.$refs.tagViewOption['$el']
-  optilon_dom.style.visibility = newVal ? 'visible' : 'hidden'
-})
-
-// 控制标签操作卡显隐
+/** 标签操作卡片的显隐 */
 function toToggleTagViewOptionCard() {
-  isVisible.value = !isVisible.value
+  isCardVisible.value = !isCardVisible.value
 }
 
 function handleCardClose(val: boolean) {
-  isVisible.value = val
+  isCardVisible.value = val
 }
 
 function toToggleMainContentFullScreen() {
   //todo main-app 部分的全屏实现
   // top 和 sidebar 隐藏再进行全屏操作
-  isVisible.value = false
+  isCardVisible.value = false
 }
+//#endregion
 
-// 初始化
+/** 初始化操作 */
 function initTagView() {
-  // 注意冒泡多次触发click事件
-  document.body.addEventListener('click', (event) => {
-    event.stopPropagation()
-    if (isVisible.value && !isFirstRender) {
-      const option_dom = proxy.$refs.tagViewOption['$el']
-      if (!option_dom.contains(event.target)) {
-        isVisible.value = false
-      }
-    }
-    isFirstRender = false
-  })
+  const tags = filterAffixTags(routes)
+  for (const tag of tags) {
+    tagStore.addTagView(cloneDeep(tag))
+  }
+  // 添加当前路由到 tag-view-list
+  tagStore.addTagView(cloneDeep(route))
 }
 
 onBeforeMount(() => {
   initTagView()
+  // 注意冒泡多次触发click事件
+  document.body.addEventListener('click', (event) => {
+    event.stopPropagation()
+    if (isCardVisible.value && !isFirstRender) {
+      const option_dom = proxy.$refs.tagViewOption['$el']
+      if (!option_dom.contains(event.target)) {
+        isCardVisible.value = false
+      }
+    }
+    isFirstRender = false
+  })
 })
 
 onBeforeUnmount(() => {
   document.body.removeEventListener('click', () => {
-    // console.log('remove')
+    // console.log('remove click')
   })
 })
 
 onMounted(() => {
-  if (localStorage.getItem('tag__info')) {
-    tagViewsStore.$state = JSON.parse(localStorage.getItem('tag__info'))
-  } else {
-    // 本地存储 tag 信息
-    localStorage.setItem('tag__info', JSON.stringify(tagViewsStore.$state))
-  }
-  tagViewsStore.addTagView(Object.assign({}, route))
+  console.log('trigger', route)
 })
 </script>
 
@@ -215,7 +239,6 @@ onMounted(() => {
   align-items: flex-end;
   height: $tag-view-height;
   border-bottom: 1px solid $border-color;
-  overflow: hidden;
 
   .tag-view-left {
     flex: 1;
@@ -258,7 +281,7 @@ onMounted(() => {
     border: 1px solid $border-color;
     border-bottom: none;
 
-    .tag_view__body {
+    .tag-view__body {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -291,10 +314,17 @@ onMounted(() => {
 }
 
 .option-card {
-  visibility: hidden;
-  position: fixed;
+  position: absolute;
   top: $base-tabbar-height + 4;
   right: 2px;
-  transform: all 300ms linear;
+  max-height: 0;
+  transition: max-height 300ms ease; // 通过max-height 实现过渡效果
+  overflow: hidden;
+  z-index: 999;
+
+  &.active {
+    visibility: visible;
+    max-height: 210px;
+  }
 }
 </style>

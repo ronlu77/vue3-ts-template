@@ -6,7 +6,7 @@
     </li>
     <li
       class="option__item close"
-      :class="{ disabled: disabledProps.isClose }"
+      :class="{ disabled: !disabledProps.close }"
       @click="handleTagOption('close')"
     >
       <SvgIcon class="svg-icon__item" name="" size="16"></SvgIcon>
@@ -14,7 +14,7 @@
     </li>
     <li
       class="option__item close_left"
-      :class="{ disabled: disabledProps.isCloseLeft }"
+      :class="{ disabled: !disabledProps.closeLeft }"
       @click="handleTagOption('close_left')"
     >
       <SvgIcon class="svg-icon__item" name="" size="16"></SvgIcon>
@@ -22,7 +22,7 @@
     </li>
     <li
       class="option__item close_right"
-      :class="{ disabled: disabledProps.isCloseRight }"
+      :class="{ disabled: !disabledProps.closeRight }"
       @click="handleTagOption('close_right')"
     >
       <SvgIcon class="svg-icon__item" name="" size="16"></SvgIcon>
@@ -30,7 +30,7 @@
     </li>
     <li
       class="option__item close_other"
-      :class="{ disabled: disabledProps.isCloseOther }"
+      :class="{ disabled: !disabledProps.closeOther }"
       @click="handleTagOption('close_other')"
     >
       <SvgIcon class="svg-icon__item" name="" size="16"></SvgIcon>
@@ -38,7 +38,7 @@
     </li>
     <li
       class="option__item close_all"
-      :class="{ disabled: disabledProps.isCloseAll }"
+      :class="{ disabled: !disabledProps.closeAll }"
       @click="handleTagOption('close_all')"
     >
       <SvgIcon class="svg-icon__item" name="" size="16"></SvgIcon>
@@ -47,48 +47,58 @@
   </ul>
 </template>
 <script setup lang="ts">
-import { ref, reactive, watch, getCurrentInstance, onMounted } from 'vue'
+import { unref, reactive, watch, onMounted, computed } from 'vue'
 import useTagViewsStore from '@/store/modules/tagViews'
 import { useRoute } from 'vue-router'
+import { isAffix } from '@/utils/is'
 
-const { proxy } = getCurrentInstance()
 const route = useRoute()
 const tagViewsStore = useTagViewsStore()
+const tagViewList = computed(() => tagViewsStore.tagViewList)
 const emit = defineEmits(['closeCard'])
 const disabledPropsInit = () => ({
-  isClose: false,
-  isCloseLeft: false,
-  isCloseRight: false,
-  isCloseOther: false,
-  isCloseAll: false,
+  close: true,
+  closeLeft: true,
+  closeRight: true,
+  closeOther: true,
+  closeAll: true,
 })
 const disabledProps = reactive(disabledPropsInit())
 
-// todo 目前没有判断其他tag 使用 affix 情况
+/** 根据当前 tagviewList 的情况来判断卡片哪些操作可以启用，考虑了开启 affix 情况 */
 function setOptionCardDisabled() {
   Object.assign(disabledProps, disabledPropsInit())
-  const activeTagViewIndex: number = tagViewsStore.getActiveTagViewIndex(route)
-  const tagViewListLength: number = tagViewsStore.tagViewList.length
-  if (activeTagViewIndex == tagViewListLength - 1) {
-    disabledProps.isCloseRight = true
-  }
-  if (activeTagViewIndex <= 1) {
-    disabledProps.isCloseLeft = true
-  }
+  let affixs = 0 // tagviewlist 中 affix:true 的个数
+  const activeTagIndex = tagViewsStore.getActiveTagViewIndex(route)
+  const length = unref(tagViewList).length
+  // 当前标签开启 affix: true 的情况
   if (route.meta && route.meta.affix) {
-    disabledProps.isClose = true
+    disabledProps.close = false
   }
-  if (tagViewListLength === 1) {
-    disabledProps.isCloseLeft = true
-    disabledProps.isCloseRight = true
-    disabledProps.isCloseOther = true
-    disabledProps.isCloseAll = true
+  if (
+    activeTagIndex == length - 1 ||
+    isAffix(unref(tagViewList)[activeTagIndex + 1])
+  ) {
+    disabledProps.closeRight = false
+  }
+  if (activeTagIndex <= 1 || isAffix(unref(tagViewList)[activeTagIndex - 1])) {
+    disabledProps.closeLeft = false
+  }
+  // 如果 tag 全部都是 affix: true, 关闭全部和关闭其他也不可用
+  unref(tagViewList).forEach((item) => isAffix(item) && affixs++)
+  if (affixs === length) {
+    disabledProps.closeOther = false
+    disabledProps.closeAll = false
+  }
+  // 当前tag affix: false，其他路由为 affix：true ，则无法开启关闭其他功能，
+  if (affixs === length - 1 && !isAffix(route)) {
+    disabledProps.closeOther = false
   }
 }
 
-// todo 此处判断监听卡片是否能够进行操作过于冗余，后期更改
+// tagViewsList中的数量发生意味着需要重新设置当前操作卡片功能开启情况
 watch(
-  () => tagViewsStore.tagViewList,
+  () => tagViewList.value,
   () => {
     setOptionCardDisabled()
   },
@@ -99,7 +109,6 @@ watch(route, () => {
   setOptionCardDisabled()
 })
 
-// 标签操作卡
 function handleTagOption(type = '') {
   switch (type) {
     case 'refresh':
@@ -107,28 +116,28 @@ function handleTagOption(type = '') {
       emit('closeCard', false)
       break
     case 'close':
-      if (disabledProps.isClose) return
+      if (!disabledProps.close) return
       tagViewsStore.closeCurrentTagView(route)
       emit('closeCard', false)
       break
     case 'close_left':
-      if (disabledProps.isCloseLeft) return
+      if (!disabledProps.closeLeft) return
       tagViewsStore.closeLeftTagView(route)
       emit('closeCard', false)
       break
     case 'close_right':
-      if (disabledProps.isCloseRight) return
+      if (!disabledProps.closeRight) return
       tagViewsStore.closeRightTagView(route)
       emit('closeCard', false)
       break
     case 'close_other':
-      if (disabledProps.isCloseOther) return
+      if (!disabledProps.closeOther) return
       tagViewsStore.closeOtherTagView(route)
       emit('closeCard', false)
       break
     case 'close_all':
-      if (disabledProps.isCloseAll) return
-      tagViewsStore.closeAllTagView()
+      if (!disabledProps.closeAll) return
+      tagViewsStore.closeAllTagView(route)
       emit('closeCard', false)
       break
     default:

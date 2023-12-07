@@ -1,8 +1,8 @@
-/** */
+/** 路由，菜单相关操作 */
 import { defineStore } from 'pinia'
 import { constantRoutes } from '@/router/routes'
 
-export const usePermissionStore = defineStore({
+const usePermissionStore = defineStore({
   id: 'app-permission',
   state: () => ({
     // 权限代码列表
@@ -19,6 +19,7 @@ export const usePermissionStore = defineStore({
     // menu List
     // 菜单列表
     frontMenuList: [],
+    routes: [...constantRoutes],
   }),
   getters: {},
   actions: {
@@ -28,3 +29,5 @@ export const usePermissionStore = defineStore({
     },
   },
 })
+
+export default usePermissionStore

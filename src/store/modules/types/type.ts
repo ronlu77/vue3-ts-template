@@ -10,4 +10,5 @@ export interface UserStore {
 export interface SettingState {
   theme: string
   language: string
+  tag: boolean
 }

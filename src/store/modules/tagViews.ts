@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { RouteLocationNormalized } from 'vue-router'
 import router from '@/router'
-import { cloneDeep } from 'lodash-es'
+import { findNodeIndex } from '@/utils'
+import { cloneDeep, isUndefined } from 'lodash-es'
 
 interface State {
   tagViewList: []
@@ -11,7 +12,7 @@ interface State {
   refreshing: boolean
 }
 
-//todo  目前都没有考虑除首页外的 affix 情况
+// todo 未考虑 nocache 属性开启情况
 const useTagViewsStore = defineStore('tagViews', {
   state: (): State => ({
     tagViewList: [],
@@ -22,19 +23,14 @@ const useTagViewsStore = defineStore('tagViews', {
   }),
   actions: {
     addTagView(tag: RouteLocationNormalized) {
-      const tagIndex = this.tagViewList.findIndex(
-        (item: RouteLocationNormalized) => item.fullPath === tag.fullPath,
-      )
-      if (this.BlockOrder.includes(tag.name)) return
-      if (tagIndex > -1) return
+      const tagIndex = findNodeIndex(this.tagViewList, tag, 'fullPath')
+      if (this.BlockOrder.includes(tag.name) || tagIndex > -1) return
       this.addCacheTag(tag)
       this.tagViewList.push(tag)
     },
     deleteTagView(tag: RouteLocationNormalized) {
-      const tagIndex = this.tagViewList.findIndex(
-        (item: RouteLocationNormalized) => item.fullPath === tag.fullPath,
-      )
-      if (tagIndex === -1) return
+      const tagIndex = findNodeIndex(this.tagViewList, tag, 'fullPath')
+      if (tagIndex === -1 || isUndefined(tagIndex)) return
       this.deleteCacheTag(this.tagViewList[tagIndex].name)
       this.tagViewList.splice(tagIndex, 1)
     },
@@ -67,21 +63,22 @@ const useTagViewsStore = defineStore('tagViews', {
       this.deleteCacheTag(this.tagViewList[index + 1].name)
       this.tagViewList.splice(index + 1, 1)
     },
-    closeAllTagView() {
+    closeAllTagView(route) {
       const affixList = this.gainAffixTagView()
       this.tagViewList = affixList
       this.cacheTagList = this.tagViewList.map((item) => item.name)
-      router.push('/') //* 暂定
+      // 如果当前路由开启 affix: true 则不会跳转到首页
+      route.meta && !route.meta.affix && router.push('/')
     },
     closeOtherTagView(route) {
       const affixList = cloneDeep(this.gainAffixTagView())
-      const index = affixList.findIndex((item) => item.path === route.path)
+      const index = findNodeIndex(affixList, route, 'path')
       index === -1 && affixList.push(Object.assign({}, route))
       this.tagViewList = affixList
       this.cacheTagList = affixList.map((item) => item.name)
     },
     getActiveTagViewIndex(route: any): number {
-      return this.tagViewList.findIndex((item) => item.path === route.path)
+      return findNodeIndex(this.tagViewList, route, 'path')
     },
     addCacheTag(route: RouteLocationNormalized) {
       if (this.cacheTagList.includes(route.name)) return
