@@ -75,18 +75,18 @@ export default defineComponent({
     }
 
     /** 设置tableList的大小 */
-    function setTableListSize(props) {
+    function setTableListSize(props): void {
       const size = props.size
       if (isUndefined(size)) return
       nextTick(() => {
-        // 根据 l-table-list 外层父元素撑满
+        // 根据 l-table-container 外层父元素撑满
         if (size === 'full') {
           const LTableList = document.getElementById(uId.value)
           if (isNil(LTableList)) return
-          const parentDom = LTableList.parentNode
+          const parentDom = LTableList.parentNode as HTMLElement
           const MainClientHeight = parentDom.offsetHeight
           // [32, 28, 40] => [top, navtool, pagination]
-          useTableHeight.value = MainClientHeight - 100 - 10 // offset 10
+          useTableHeight.value = MainClientHeight - 100 - 35 // offset 35
         } else if (size === 'auto') {
           useTableHeight.value = (useSourceData.value.length + 1) * 41
         } else if (size === 'custom') {
@@ -211,9 +211,11 @@ export default defineComponent({
       const renderTableMain = renderTable(props.schema, props)
       const renderPaginationMain = renderPagination(useSchema.value)
       return (
-        <div class="l-table-list" id={uId.value || ''}>
-          {renderTableMain}
-          {renderPaginationMain}
+        <div class="l-table-list__contianer" id={uId.value || ''}>
+          <div class="l-table-list__wrapper">
+            {renderTableMain}
+            {renderPaginationMain}
+          </div>
         </div>
       )
     }

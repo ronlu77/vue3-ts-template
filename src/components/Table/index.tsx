@@ -55,7 +55,7 @@ export default defineComponent({
       }
       const finalSchema = cloneDeep(propsSchema)
       const schemaPropKeys = Object.keys(propsSchema.properties)
-      schemaPropKeys.forEach((key, index) => {
+      schemaPropKeys.forEach((key) => {
         const filedColumn = finalSchema.properties[key]
         if (!isUndefined(finalSchema.properties)) {
           finalSchema.properties[key] = Object.assign(
@@ -310,7 +310,9 @@ export default defineComponent({
       return (
         <div class="l-table__container">
           <div class="l-table__top l-table-nav">{tableNav}</div>
-          <div ref={tableMainRef} class="l-table__main">{renderTableMain}</div>
+          <div ref={tableMainRef} class="l-table__main">
+            {renderTableMain}
+          </div>
         </div>
       )
     }

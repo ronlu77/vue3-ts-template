@@ -2,7 +2,7 @@
   <div class="expand-card__wrapper" :class="{ expand: expand }">
     <div class="expand-card__header">
       <slot name="header">
-        <h2>{{ title }}</h2>
+        <h2 class="title">{{ title }}</h2>
       </slot>
       <svg-icon
         class="svg-icon-dropdown"
@@ -41,7 +41,7 @@ function toggleExpandCard() {
   min-height: 120px;
   border: 1px solid $border-color;
   border-radius: 6px;
-  background: $background-color;
+  background: $normal-color;
   margin: 10px 0;
 
   .expand-card__header {
@@ -50,11 +50,16 @@ function toggleExpandCard() {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 10px;
+    margin: 0 6px;
+
+    .title {
+      padding: 0 6px;
+      font-weight: bold !important;
+    }
 
     .svg-icon-dropdown {
       cursor: pointer;
-      transform: rotate(-180deg);
+      transform: rotate(-0.5turn);
       transition: transform 300ms ease;
     }
   }
