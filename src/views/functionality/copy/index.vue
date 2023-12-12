@@ -20,7 +20,7 @@
 </template>
 <script setup lang="ts" name="Copy">
 import { ref } from 'vue'
-import { setCopyContent } from '@/common/copy'
+import { copyContent } from '@/utils/copyToClipboard'
 import { ElMessage } from 'element-plus'
 
 const inputText = ref('')
@@ -28,8 +28,8 @@ const showText = ref('')
 
 function handleCopy() {
   if (inputText.value === '') {
-    return ElMessage.warning('请输入所需复制内容！')
+    return ElMessage.warning('请输入所需复制内容!')
   }
-  setCopyContent(inputText.value)
+  copyContent(inputText.value)
 }
 </script>
