@@ -1,4 +1,8 @@
 // 更改el-menu-item 选中时的样式
+.el-menu {
+    border-right: none !important;
+}
+
 .el-menu-item.is-active {
     font-weight: bold;
     color: $text-color !important;
@@ -37,4 +41,12 @@
     &:hover {
         background: $hover-color !important;
     }
+}
+
+.el-dialog {
+    border-radius: 4px;
+}
+
+.el-divider {
+    margin: 6px 0 !important;
 }
