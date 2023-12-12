@@ -1,9 +1,6 @@
 <template>
-  <div>
-    <el-card shadow="never">
-      <template #header>
-        <span>水印功能实现</span>
-      </template>
+  <div class="container__inner">
+    <expand-card title="水印功能实现">
       <el-switch
         v-model="useWatermark"
         active-color="#13ce66"
@@ -11,10 +8,10 @@
         inactive-text="off"
         @change="handleWatermark"
       ></el-switch>
-    </el-card>
-    <div class="img__wrapper">
-      <img style="width: 300px; height: 300px" :src="src" v-watermark />
-    </div>
+      <div class="img__wrapper">
+        <img style="width: 300px; height: 300px" :src="src" v-watermark />
+      </div>
+    </expand-card>
   </div>
 </template>
 <script setup lang="ts">

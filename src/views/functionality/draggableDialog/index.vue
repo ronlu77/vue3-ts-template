@@ -1,13 +1,10 @@
 <template>
   <div class="container__inner">
-    <el-card shadow="never">
-      <template #header>
-        <span>可拖拽弹窗</span>
-      </template>
+    <expand-card title="可拖拽弹窗">
       <el-button type="primary" @click="visibleDialog = true">
         点击出现弹窗
       </el-button>
-    </el-card>
+    </expand-card>
 
     <el-dialog v-model="visibleDialog" title="title" width="30%" draggable>
       <span>Try to draggabing me !</span>

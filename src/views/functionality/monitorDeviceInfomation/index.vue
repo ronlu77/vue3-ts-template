@@ -2,29 +2,17 @@ import { login } from '@/api/user'; import { isNumber } from
 'element-plus/es/utils';
 <template>
   <div class="container__inner">
-    <el-card shadow="never">
-      <template #header>
-        <span>设备网络监控</span>
-      </template>
+    <expand-card title="设备网络监控">
       <el-tag type="success">test</el-tag>
-    </el-card>
-    <el-card shadow="never">
-      <template #header>
-        <span>鼠标位置</span>
-      </template>
+    </expand-card>
+    <expand-card title="鼠标位置">
       <p>X轴: {{ mouseLocal.x_local }}</p>
       <p>Y轴: {{ mouseLocal.y_local }}</p>
-    </el-card>
-    <el-card shadow="never">
-      <template #header>
-        <span>键盘监听</span>
-        <p>尝试按下w,a,s,d按键 ~</p>
-      </template>
-    </el-card>
-    <el-card shadow="never">
-      <template #header>
-        <span>监听按键是否开启</span>
-      </template>
+    </expand-card>
+    <expand-card title="键盘监听">
+      <p>尝试按下W, A, S, D按键 ~ ~</p>
+    </expand-card>
+    <expand-card title="监听按键是否开启">
       &nbsp;
       <el-tag :type="keyboardLock.isAltLock ? 'success' : 'danger'">
         Alter
@@ -45,12 +33,8 @@ import { login } from '@/api/user'; import { isNumber } from
       <el-tag :type="keyboardLock.isCapsLock ? 'success' : 'danger'">
         CapsLk
       </el-tag>
-    </el-card>
-    <el-card shadow="never">
-      <template #header>
-        <p>获取地理位置</p>
-      </template>
-    </el-card>
+    </expand-card>
+    <expand-card title="获取地理位置"></expand-card>
   </div>
 </template>
 
@@ -85,11 +69,11 @@ onMounted(() => {
   })
 })
 
-onUnmounted(() => {})
+onUnmounted(() => { })
 </script>
 
 <style lang="scss" scoped>
-.el-card + .el-card {
+.expand-card__wrapper+.expand-card__wrapper {
   margin-top: 5px;
 }
 </style>
