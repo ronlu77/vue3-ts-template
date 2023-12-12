@@ -69,11 +69,11 @@ onMounted(() => {
   })
 })
 
-onUnmounted(() => { })
+onUnmounted(() => {})
 </script>
 
 <style lang="scss" scoped>
-.expand-card__wrapper+.expand-card__wrapper {
+.expand-card__wrapper + .expand-card__wrapper {
   margin-top: 5px;
 }
 </style>
