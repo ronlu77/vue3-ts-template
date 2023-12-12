@@ -1,5 +1,5 @@
 import { createPinia } from 'pinia'
-import { useTagViewsStore } from '@/store/modules/tagViews'
+import useTagViewsStore from '@/store/modules/tagViews'
 
 //! 在setup() 外使用useStore需要传入pinia实例
 const pinia = createPinia()

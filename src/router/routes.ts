@@ -115,6 +115,12 @@ export const constantRoutes = [
           import('@/views/functionality/image-preview/index.vue'),
         meta: { title: '图片预览', icon: '' },
       },
+      {
+        path: 'fullscreen',
+        name: 'FullScreen',
+        component: () => import('@/views/functionality/fullscreen/index.vue'),
+        meta: { title: '全屏操作', icon: '' },
+      },
     ],
   },
   {

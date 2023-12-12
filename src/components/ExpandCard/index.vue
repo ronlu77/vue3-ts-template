@@ -38,6 +38,7 @@ function toggleExpandCard() {
 .expand-card__wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-height: 120px;
   border: 1px solid $border-color;
   border-radius: 6px;
