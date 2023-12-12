@@ -108,6 +108,13 @@ export const constantRoutes = [
           import('@/views/functionality/monitorDeviceInfomation/index.vue'),
         meta: { title: '设备监控', icon: '' },
       },
+      {
+        path: 'imagePreview',
+        name: 'ImagePreview',
+        component: () =>
+          import('@/views/functionality/image-preview/index.vue'),
+        meta: { title: '图片预览', icon: '' },
+      },
     ],
   },
   {

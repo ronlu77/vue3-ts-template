@@ -13,6 +13,7 @@ html {
     &.light {
         --text-color: #9292AE;
         --background-color: #F7F8FB;
+        --normal-color: #fff;
         --menu-background: #0F1730;
         --hover-color: #F3F3FB;
         --active-color: #4DABFF;
@@ -22,6 +23,7 @@ html {
 
 $text-color: var(--text-color);
 $background-color: var(--background-color);
+$normal-color: var(--normal-color);
 $menu-background: var(--menu-background);
 $hover-color: var(--hover-color);
 $active-color: var(--active-color);
