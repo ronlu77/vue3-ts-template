@@ -1,5 +1,6 @@
 import { TextTag, TextDict, NavTools } from './components'
-import { ref, computed, watch, defineComponent, nextTick } from 'vue'
+import { ref, computed, watch, defineComponent } from 'vue'
+import { Ref, ComponentPublicInstance } from 'vue'
 import { CD } from './utils'
 import { cloneDeep, isUndefined, isNil } from 'lodash-es'
 
@@ -14,14 +15,16 @@ export default defineComponent({
   },
   emit: [],
   setup(props, context) {
-    const DefaultColumnWidth = 180
+    const DEFAULT_COLUMN_WIDTH = 180
     const { emit, slots, expose } = context
     if (isUndefined(props.schema) || isUndefined(props.schema.properties)) {
       console.warn('ltable [schema] [schema.properties] is required.')
       return () => ''
     }
-    const elTableRef = ref<HTMLElement>(null)
-    const tableMainRef = ref<HTMLElement>(null)
+    const elTableRef: Ref<HTMLElement | ComponentPublicInstance | null> =
+      ref(null)
+    const tableMainRef: Ref<HTMLElement | ComponentPublicInstance | null> =
+      ref(null)
     const useTableData = computed(() => props.sourceData)
     const useTableHeight = computed(() => props.tableHeight)
 
@@ -90,7 +93,7 @@ export default defineComponent({
     function determineTableWidthSpill(schema): boolean {
       if (isNil(tableMainRef.value)) return false
       const scrollWidth = gainRealTableWidth(schema, CD)
-      return tableMainRef.value.offsetWidth < scrollWidth
+      return (tableMainRef.value as HTMLElement).offsetWidth < scrollWidth
     }
 
     /** 处理ltable 插槽列 */
@@ -205,7 +208,7 @@ export default defineComponent({
         if (!filedColumn[CD.display]) return
         // ltable-column-item 默认原生组件属性
         const defaultColumnComponentProps = {
-          width: DefaultColumnWidth,
+          width: DEFAULT_COLUMN_WIDTH,
           sortable: false,
           showOverflowTooltip: true,
           align: 'left',
@@ -270,17 +273,19 @@ export default defineComponent({
         return isNil(properties[k][CD.display]) || properties[k][CD.display]
       })
       schemaPropKeys.forEach((key) => {
-        _width += properties[key][CD.componentProps].width || DefaultColumnWidth // 默认宽度
+        _width +=
+          Number(properties[key][CD.componentProps].width) ||
+          DEFAULT_COLUMN_WIDTH
       })
       return _width
     }
 
     const refreshLayout = () => {
-      elTableRef.value && elTableRef.value.doLayout()
+      elTableRef.value && (elTableRef.value as any).doLayout()
     }
 
     const tableSelection = () => {
-      return elTableRef.value.getSelectionRows()
+      return (elTableRef.value as any).getSelectionRows()
     }
 
     expose({
