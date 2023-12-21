@@ -207,7 +207,7 @@ function resetTable() {}
     width: 100%;
     min-height: 46px;
     padding: 5px 10px;
-    background: $background-color;
+    background: $sub-background;
 
     .el-icon__close {
       color: $text-color;
@@ -256,7 +256,7 @@ function resetTable() {}
 }
 
 .fixed {
-  background: #e6f4ff !important;
+  background: $sub-background !important;
 
   .svg-icon__item {
     visibility: visible;

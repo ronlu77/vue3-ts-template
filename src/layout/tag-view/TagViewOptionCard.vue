@@ -153,8 +153,8 @@ onMounted(() => {
 .option-warpper {
   font-size: 14px;
   border-radius: 6px;
-  box-shadow: 0 0 6px rgba($color: #000000, $alpha: 0.3);
-  background: #fff;
+  box-shadow: 0 0 6px rgba($color: #999, $alpha: 0.3);
+  background: $sub-background;
 
   .option__item {
     display: flex;

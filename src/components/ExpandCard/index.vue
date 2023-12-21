@@ -42,7 +42,7 @@ function toggleExpandCard() {
   min-height: 120px;
   border: 1px solid $border-color;
   border-radius: 6px;
-  background: $normal-color;
+  background: $sub-background;
   margin: 10px 0;
 
   .expand-card__header {

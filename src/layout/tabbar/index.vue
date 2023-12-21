@@ -5,7 +5,7 @@
         :is-collpase="isCollapse"
         @toggle-collpase="handleToggleCollpase"
       />
-      <Breadcrumb />
+      <Breadcrumb v-if="unref(getShowBreadcrumb)" />
     </div>
     <div class="tabbar-right">
       <Setting />
@@ -17,10 +17,12 @@
 import SidebarTrigger from './SidebarTrigger.vue'
 import Breadcrumb from './breadcrumb/index.vue'
 import Setting from './setting/index.vue'
-import { ref } from 'vue'
+import { ref, unref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
+import { useRootSetting } from '@/hooks/setting/useRootSetting'
 
 const appStore = useAppStore()
+const { getShowBreadcrumb } = useRootSetting()
 const isCollapse = ref(false)
 
 function handleToggleCollpase() {

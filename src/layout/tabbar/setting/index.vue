@@ -23,6 +23,7 @@
     ></SvgIcon>
   </div>
 
+  <!-- 系统配置 -->
   <SettingDrawer v-model:visible="visibleSetting" />
 </template>
 

@@ -1,56 +1,90 @@
 // 更改el-menu-item 选中时的样式
 .el-menu {
-    border-right: none !important;
+  border-right: none !important;
 }
 
-.el-menu-item.is-active {
+.el-menu-item {
+  &.is-active {
     font-weight: bold;
     color: $text-color !important;
 
     &::before {
-        position: absolute;
-        left: 6px;
-        content: '';
-        width: 6px;
-        height: 90%;
-        border-radius: 6px;
-        background-color: $active-color;
+      position: absolute;
+      left: 6px;
+      content: '';
+      width: 6px;
+      height: 90%;
+      border-radius: 6px;
+      background-color: $active-color;
     }
-}
+  }
 
-.el-menu-item:hover {
+  &:hover {
     background: $hover-color !important;
+  }
+  // el-menu 内容居中
+  .el-menu-tooltip__trigger {
+    justify-content: center;
+  }
 }
 
 // bug useDark 切换黑暗模式，el-sub-menu background-color 不改变
 .el-sub-menu__title {
-    background-color: $menu-background !important;
+  background-color: $menu-background !important;
+}
+
+// 只有隐藏状态下的副标题才需要居中
+.hiden .el-sub-menu__title {
+  justify-content: center;
 }
 
 .el-scrollbar__view {
-    height: 100%;
+  height: 100%;
 }
 
 .el-icon {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .el-dropdown-menu__item {
-    justify-content: center;
+  justify-content: center;
 
-    &:hover {
-        background: $hover-color !important;
-    }
+  &:hover {
+    background: $hover-color !important;
+  }
+}
+
+.el-drawer {
+  .el-drawer__header {
+    margin-bottom: 0 !important;
+    padding: 20px !important;
+    border-bottom: 1px solid var(--el-border-color);
+  }
+
+  .el-drawer__title {
+    font-weight: bold;
+  }
+
+  .el-drawer__body,
+  .el-drawer__footer {
+    text-align: center;
+    padding: 0;
+  }
+
+  .el-drawer__body {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .el-dialog {
-    border-radius: 4px;
+  border-radius: 4px;
 }
 
 .el-divider {
-    margin: 6px 0 !important;
+  margin: 15px 0 !important;
 }
 
 .el-message {
-    min-width: 260px;
+  min-width: 260px;
 }

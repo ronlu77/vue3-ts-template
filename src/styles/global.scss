@@ -1,0 +1,43 @@
+html {
+  // 黑暗主题
+  &.dark {
+    --text-color: #fff;
+    --background-color: #000;
+    --sub-background: #141414;
+    --menu-background: #24292e;
+    --hover-color: #2b3036;
+    --active-color: #b392f0;
+    --border-color: #58585b;
+  }
+
+  // 默认主题
+  &.light {
+    --text-color: #9292ae;
+    --background-color: #f7f8fb;
+    --sub-background: #fff;
+    --menu-background: #0f1730;
+    --hover-color: #f3f3fb;
+    --active-color: #4dabff;
+    --border-color: #e4e7ed;
+  }
+}
+
+$normal-gray: #dcdfe6;
+$normal-color: #fff;
+$border-color: var(--border-color);
+$text-color: var(--text-color);
+$sub-background: var(--sub-background);
+$background-color: var(--background-color);
+$menu-background: var(--menu-background);
+$hover-color: var(--hover-color);
+$active-color: var(--active-color);
+
+// 左侧菜单的宽度
+$base-menu-width: 260px;
+$base-menu-hiden-width: 60px;
+
+// 顶部导航的高度
+$base-tabbar-height: 70px;
+$base-nav-height: 40px;
+$tag-view-height: 30px;
+$base-logo-height: 60px;

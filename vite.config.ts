@@ -16,6 +16,8 @@ export default defineConfig(({ command, mode }) => {
   return {
     // 前端跨域代理
     server: {
+      host: '127.0.0.1',
+      port: '5050',
       proxy: {
         [env.VITE_APP_BASE_API]: {
           target: env.VITE_APP_SERVER_URL,
@@ -45,6 +47,7 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         '@': path.resolve('./src'), // 配置相对路径别名使用 @ 来代替 src
+        '#': path.resolve('/types/'),
       },
     },
     //scss 全局变量配置
@@ -52,7 +55,7 @@ export default defineConfig(({ command, mode }) => {
       preprocessorOptions: {
         scss: {
           javascriptEnabled: true,
-          additionalData: '@import "./src/styles/variable.scss";',
+          additionalData: '@import "./src/styles/global.scss";',
         },
       },
     },

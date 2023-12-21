@@ -1,4 +1,11 @@
-import { isNil } from 'lodash-es'
+import { isObject, isArray } from '@/utils/is'
+import {
+  isNil,
+  isEqual,
+  intersectionWith,
+  unionWith,
+  mergeWith,
+} from 'lodash-es'
 /**
  * 根据唯一的key查询数组中对象第一次出现的下标
  * @param {array} list 查询数组
@@ -23,4 +30,51 @@ export function findNodeIndex(list: any[], node: any, key: string): number {
     _index++
   }
   return _has ? _index + 1 : -1
+}
+
+/**
+ * 递归合并两个对象
+ * @param source 合并的源对象
+ * @param target 目标对象，合并后的结果存放
+ * @param mergeArrays 如何合并
+ *      - "union": 对数组执行并集操作；
+ *      - "intersection": 对数组执行交集操作；
+ *      - "concat": 链接数组;
+ *      - "replace": 目标数组替换原数组。
+ * @return 合并后对象
+ */
+export function deepMerge<
+  T extends object | null | undefined,
+  U extends object | null | undefined,
+>(
+  source: T,
+  target: U,
+  mergeArrays: 'union' | 'intersection' | 'concat' | 'replace' = 'replace',
+): T & U {
+  if (!target) {
+    return source as T & U
+  }
+  if (!source) {
+    return target as T & U
+  }
+  return mergeWith({}, source, target, (sourceValue, targetValue) => {
+    if (isArray(target) && isArray(source)) {
+      switch (mergeArrays) {
+        case 'union':
+          return unionWith(sourceValue, targetValue, isEqual)
+        case 'intersection':
+          return intersectionWith(sourceValue, targetValue, isEqual)
+        case 'concat':
+          return targetValue.concat(sourceValue)
+        case 'replace':
+          return targetValue
+        default:
+          console.warn(`Unkown mergeArrays strategy ${mergeArrays as string}.`)
+      }
+    }
+    if (isObject(targetValue) && isObject(sourceValue)) {
+      return deepMerge(sourceValue, targetValue, mergeArrays)
+    }
+    return undefined
+  })
 }

@@ -8,16 +8,21 @@
         </keep-alive>
       </transition>
     </router-view>
-    <div class="copyright">
+    <div class="copyright" v-if="showFooter">
       <p>2023&nbsp;-&nbsp;{{ currentYear }}&nbsp; EMS by ron</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { unref, computed } from 'vue'
 import useTagViewsStore from '@/store/modules/tagViews'
+import { useRootSetting } from '@/hooks/setting/useRootSetting'
 
+const { getShowFooter } = useRootSetting()
+const showFooter = computed(() => {
+  return unref(getShowFooter)
+})
 const currentYear = computed(() => new Date().getFullYear())
 const cacheViewList = computed(() => useTagViewsStore().cacheTagList)
 </script>

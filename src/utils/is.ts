@@ -27,3 +27,11 @@ export const isExtrernalLink = (path: string): boolean => {
 export const isAffix = (route: any): boolean => {
   return route.meta && route.meta.affix
 }
+
+export const isObject = (val: any): boolean => {
+  return val !== null && is(val, 'object')
+}
+
+export const isArray = (val: any): boolean => {
+  return val && Array.isArray(val)
+}

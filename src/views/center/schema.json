@@ -1,0 +1,36 @@
+{
+  "todoSchema": {
+    "properties": {
+      "taskName": {
+        "title": "任务名称",
+        "x-component-props": {
+          "width": 180,
+          "align": "center"
+        }
+      },
+      "initiator": {
+        "title": "发起人",
+        "x-component-props": {
+          "width": 180,
+          "align": "center"
+        }
+      },
+      "description": {
+        "title": "任务详情",
+        "widthMode": "auto",
+        "x-component-props": {
+          "align": "center"
+        }
+      },
+      "option": {
+        "title": "操作",
+        "customRender": "slotName",
+        "x-component-props": {
+          "width": 180,
+          "align": "center",
+          "fixed": "right"
+        }
+      }
+    }
+  }
+}
