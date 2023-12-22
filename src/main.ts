@@ -7,12 +7,13 @@ import ElementPlus from 'element-plus'
 // 引入 Element
 import 'element-plus/dist/index.css'
 // 配置 element-plus 国际化
-//@ts-expect-error 忽略当前文件ts类型的检测否则会有红色提示打包报错
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // 引入全局注册 el-icon 组件插件
 import elementIcon from '@/assets/icons/index.ts'
-// element-plus@2.2.0 黑暗主题颜色
+//* element-plus@2.2.0 黑暗主题颜色
 import 'element-plus/theme-chalk/dark/css-vars.css'
+// 全局 message messageBox 配置
+import './utils/elMessageConfig.ts'
 
 // svg插件需要配置代码
 import 'virtual:svg-icons-register'
