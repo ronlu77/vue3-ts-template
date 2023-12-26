@@ -46,12 +46,10 @@ export function useEventListener({
     const removeWatch = watch(
       element,
       (v, _ov, cleanUp) => {
-        console.log('el 改变', v, isAddRef.value)
         if (v) {
           !unref(isAddRef) && addEventListener(v)
           //! cleanUp 方法会在回调函数再次执行之前执行, 用来清除副作用
           cleanUp(() => {
-            console.log('cleanUp trigger')
             autoRemove && removeEventListener(v)
           })
         }
