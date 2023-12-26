@@ -64,7 +64,6 @@
 import TagViewOptionCard from './TagViewOptionCard.vue'
 import {
   ref,
-  reactive,
   computed,
   onBeforeMount,
   onBeforeUnmount,
@@ -75,6 +74,7 @@ import {
 import { useRouter, useRoute } from 'vue-router'
 import useTagViewsStore from '@/store/modules/tagViews'
 import usePermissionStore from '@/store/modules/permission'
+import { useEventListener } from '@/hooks/event/useEventListener'
 import { cloneDeep } from 'lodash-es'
 
 const { proxy, appContext } = getCurrentInstance()
@@ -82,7 +82,7 @@ const route = useRoute()
 const router = useRouter()
 const { routes } = usePermissionStore()
 const tagStore = useTagViewsStore()
-const tagViewList = computed(() => tagStore.tagViewList) // 获取需要展示的tag集合
+const tagViewList = computed((): any => tagStore.tagViewList) // 获取需要展示的tag集合
 const isCardVisible = ref<boolean>(false) // 控制标签操作卡片显隐
 let isFirstRender = true // 是否为首次组件渲染
 let refreAnimation = null // 刷新动画对象
@@ -152,7 +152,7 @@ const findTagViewIndex = (tagViewList: Array<any>, tagView: any): number => {
 function toScrollCurrentTagView(): void {
   const CONTAINER = document.querySelector('.tag-view-container')
   const CONTAINER_WIDTH = CONTAINER.clientWidth
-  // console.log(CONTAINER_WIDTH, CONTAINER.clientLeft, proxy.$refs.elScrollbar)
+  console.log(CONTAINER_WIDTH, CONTAINER.clientLeft)
 }
 
 // 删除 tag view
@@ -209,16 +209,18 @@ function initTagView() {
 
 onBeforeMount(() => {
   initTagView()
-  // 注意冒泡多次触发click事件
-  document.body.addEventListener('click', (event) => {
-    event.stopPropagation()
-    if (isCardVisible.value && !isFirstRender) {
-      const option_dom = proxy.$refs.tagViewOption['$el']
-      if (!option_dom.contains(event.target)) {
-        isCardVisible.value = false
+  useEventListener({
+    el: document,
+    name: 'click',
+    listener: (event) => {
+      if (isCardVisible.value && !isFirstRender) {
+        const option_dom = proxy.$refs.tagViewOption['$el']
+        if (!option_dom.contains(event.target)) {
+          isCardVisible.value = false
+        }
       }
-    }
-    isFirstRender = false
+      isFirstRender = false
+    },
   })
 })
 
@@ -228,9 +230,7 @@ onBeforeUnmount(() => {
   })
 })
 
-onMounted(() => {
-  console.log('trigger', route)
-})
+onMounted(() => {})
 </script>
 
 <style lang="scss" scoped>
@@ -297,7 +297,7 @@ onMounted(() => {
       transform: scale(0.7);
 
       &:hover {
-        font-weight: bold;
+        font-weight: bolder;
         transform: scale(1);
       }
     }
@@ -310,7 +310,7 @@ onMounted(() => {
 
 .tag-view-container .tag-view__item.active {
   background: $active-color;
-  color: #fff;
+  color: $normal-color;
 }
 
 .option-card {

@@ -1,6 +1,15 @@
-import { ref, reactive, defineComponent, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import {
+  ref,
+  reactive,
+  defineComponent,
+  watch,
+  onMounted,
+  onUnmounted,
+  nextTick,
+} from 'vue'
 import request from '@/utils/request'
-import { cloneDeep, isNil, isUndefined } from 'lodash-es'
+import { useEventListener } from '@/hooks/event/useEventListener'
+import { cloneDeep, isNil, isUndefined, isNumber } from 'lodash-es'
 import qs from 'qs'
 import './style.scss'
 
@@ -86,11 +95,13 @@ export default defineComponent({
           const parentDom = LTableList.parentNode as HTMLElement
           const MainClientHeight = parentDom.offsetHeight
           // [32, 28, 40] => [top, navtool, pagination]
-          useTableHeight.value = MainClientHeight - 100 - 35 // offset 35
+          useTableHeight.value = MainClientHeight - 100 - 20 // offset 35
         } else if (size === 'auto') {
           useTableHeight.value = (useSourceData.value.length + 1) * 41
         } else if (size === 'custom') {
-          useTableHeight.value = props.tableHeight
+          useTableHeight.value = isNumber(props.tableHeight)
+            ? props.tableHeight
+            : Number(props.tableHeight)
         }
       })
     }
@@ -117,7 +128,7 @@ export default defineComponent({
     function handlePaginationChange({ key, val }) {
       paginationPropData[key] = val
       fetchTableListData(useSchema.value.requestSchema)
-      // 切换表单后滚动条回到顶部
+      // 切换表单页码后滚动条回到顶部
       lTableRef.value.elTableRef.setScrollTop(0)
     }
 
@@ -184,22 +195,26 @@ export default defineComponent({
         setTimeout(() => {
           setTableListSize(props)
           resizing = false
-        }, 300)
+        }, 30)
       }
     }
 
     onMounted(() => {
       //! 这里第二个参数回调函数不会使用外部定义变量，由于传递函数名时给的是函数的引用，执行回调函数的位置在全局层面，
       //! 因此无法根据作用域链找到传递的属性值，可以通过闭包或者bind方法改变函数执行来实现读取外部变量
-      window.addEventListener('resize', antishakeWindowResize.bind(null, props))
+      // window.addEventListener('resize', antishakeWindowResize.bind(null, props))
+      useEventListener({
+        name: 'resize',
+        listener: antishakeWindowResize.bind(null, props),
+      })
     })
 
-    onUnmounted(() => {
-      window.removeEventListener(
-        'resize',
-        antishakeWindowResize.bind(null, props),
-      )
-    })
+    // onUnmounted(() => {
+    //   window.removeEventListener(
+    //     'resize',
+    //     antishakeWindowResize.bind(null, props),
+    //   )
+    // })
 
     expose({
       lTableRef,
