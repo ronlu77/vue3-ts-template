@@ -2,7 +2,7 @@
   <el-drawer
     v-model="useVisible"
     title="项目配置"
-    size="20%"
+    :size="300"
     destroy-on-close
     append-to-body
   >
