@@ -361,4 +361,3 @@ onMounted(() => {
   height: 350px;
 }
 </style>
-./components/type
