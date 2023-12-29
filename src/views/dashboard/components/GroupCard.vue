@@ -1,6 +1,6 @@
 <template>
   <div class="group-card__container">
-    <el-card class="group-card__item">
+    <el-card class="group-card__item" shadow="never">
       <template #header>
         <div class="group-card__header">
           <span class="group-card__title">{{ item.title }}</span>
@@ -20,14 +20,7 @@
 </template>
 
 <script setup lang="ts">
-interface CardItem {
-  title: string
-  type: 'primary' | 'success' | 'danger' | 'warning' | 'info'
-  rangeStr: string
-  rangeNum: number
-  imgUrl: string
-  totalNum: number
-}
+import { CardItem } from './type'
 
 defineProps<{
   item: CardItem
