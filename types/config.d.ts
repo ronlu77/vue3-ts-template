@@ -21,4 +21,5 @@ export interface HeaderSetting {
 
 export interface MenuSetting {
   show: boolean // 侧边栏
+  collapsed: boolean // 折叠状态
 }

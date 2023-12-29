@@ -17,17 +17,16 @@
 import SidebarTrigger from './SidebarTrigger.vue'
 import Breadcrumb from './breadcrumb/index.vue'
 import Setting from './setting/index.vue'
-import { ref, unref } from 'vue'
-import { useAppStore } from '@/store/modules/app'
+import { ref, unref, computed } from 'vue'
 import { useRootSetting } from '@/hooks/setting/useRootSetting'
+import { useMenuSetting } from '@/hooks/setting/useMenuSetting'
 
-const appStore = useAppStore()
 const { getShowBreadcrumb } = useRootSetting()
-const isCollapse = ref(false)
+const { getShowSidebar, toggleMenu } = useMenuSetting()
+const isCollapse = computed(() => unref(getShowSidebar))
 
 function handleToggleCollpase() {
-  isCollapse.value = !isCollapse.value
-  appStore.toggleSidebarStatus()
+  toggleMenu()
 }
 </script>
 

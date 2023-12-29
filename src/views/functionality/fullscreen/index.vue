@@ -36,7 +36,7 @@ const { toggle: toggleFullscreen } = useFullscreen(fullscreenRef)
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 70%;
+    width: 100%;
     height: 300px;
     margin-top: 20px;
     background: $normal-color;

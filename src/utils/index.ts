@@ -43,6 +43,8 @@ export function findNodeIndex(list: any[], node: any, key: string): number {
  *      - "replace": 目标数组替换原数组。
  * @return 合并后对象
  */
+
+// T , U 未指定特定类型，如果没有继承其他类型相当于 any, 主要用于方法的重构
 export function deepMerge<
   T extends object | null | undefined,
   U extends object | null | undefined,

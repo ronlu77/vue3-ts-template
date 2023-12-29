@@ -1,4 +1,4 @@
-import type { SystemConfig } from '#/config.d.ts'
+import type { SystemConfig } from '#/config'
 import { computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 

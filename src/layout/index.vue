@@ -44,7 +44,6 @@ import Tabbar from './tabbar/index.vue'
 import AppMain from './main/index.vue'
 import { ref, unref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAppStore } from '@/store/modules/app'
 import usePermissionStore from '@/store/modules/permission'
 import { useRootSetting } from '@/hooks/setting/useRootSetting'
 import { useMenuSetting } from '@/hooks/setting/useMenuSetting'
@@ -54,12 +53,12 @@ import variables from '@/styles/variable.module.scss'
 const route = useRoute()
 const { getShowLogo, getShowTagger } = useRootSetting()
 const { getShowHeader } = useHeaderSetting()
-const { getShowSidebar } = useMenuSetting()
+const { getShowSidebar, getMenuCollapsed } = useMenuSetting()
 const showLogo = computed(() => unref(getShowLogo))
 const showSidebar = computed(() => unref(getShowSidebar))
 const showTabber = computed(() => unref(getShowHeader))
 const showTagger = computed(() => unref(getShowTagger))
-const isCollapse = computed(() => !useAppStore().opened)
+const isCollapse = computed(() => unref(getMenuCollapsed))
 const menuList = computed(() => usePermissionStore().frontMenuList)
 const currentActiveMenuPath = computed(() => route.path.toString())
 const backgroundColor = computed(() => variables.menuBackgroundColor)
@@ -71,7 +70,7 @@ watch(showTagger, (newVal, oldVal) => {
 </script>
 
 <style lang="scss" scoped>
-// has sidebar layout
+// uncollpased
 .layout__container {
   width: 100%;
   height: 100vh;
@@ -81,37 +80,33 @@ watch(showTagger, (newVal, oldVal) => {
     width: $base-menu-width;
     height: 100vh;
     background: $menu-background;
-    transition: width 0.3s ease-in;
   }
 
   :deep(.el-menu--collapse) {
     width: 100%;
   }
 
-  .layout__tabbar {
-    left: 0;
-    width: 100%;
-  }
-
-  .sidebar.layout__tabbar {
-    position: fixed;
-    top: 0;
-    left: $base-menu-width;
-    display: flex;
-    flex-direction: column;
-    height: $base-tabbar-height;
-    z-index: 2;
-    width: calc(100% - $base-menu-width);
-  }
-
-  .sidebar.layout__main {
-    position: absolute;
-    top: $base-nav-height;
-    left: $base-menu-width;
-    z-index: 1;
-    width: calc(100% - $base-menu-width);
-    height: calc(100% - $base-nav-height);
-    background: $background-color;
+  .sidebar {
+    &.layout__tabbar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: $base-menu-width;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      width: calc(100% - $base-menu-width);
+      height: $base-tabbar-height;
+    }
+    &.layout__main {
+      position: absolute;
+      top: $base-nav-height;
+      right: 0;
+      left: $base-menu-width;
+      width: calc(100% - $base-menu-width);
+      height: calc(100% - $base-nav-height);
+      background: $background-color;
+    }
   }
 
   .show-tag.layout__main {
@@ -119,22 +114,23 @@ watch(showTagger, (newVal, oldVal) => {
     height: calc(100vh - $base-tabbar-height);
   }
 
+  .layout__tabbar,
   .layout__main {
     left: 0;
-    width: 100%;
+  }
+}
+
+// collpased
+.hiden.layout__container {
+  .layout__sider {
+    width: $base-menu-hiden-width;
   }
 
-  &.hiden {
-    .layout__sider {
-      width: $base-menu-hiden-width;
-      left: $base-menu-hiden-width;
-    }
-
-    .layout__main,
-    .layout__tabbar {
-      width: calc(100vw - $base-menu-hiden-width);
-      left: $base-menu-hiden-width;
-    }
+  .layout__main,
+  .layout__tabbar {
+    width: calc(100% - $base-menu-hiden-width);
+    left: $base-menu-hiden-width;
+    transition: all 300ms ease;
   }
 }
 </style>

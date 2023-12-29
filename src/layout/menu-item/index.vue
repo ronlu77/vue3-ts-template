@@ -7,8 +7,6 @@
         :to="resolvePath(onlychildren.path, onlychildren.query)"
       >
         <el-menu-item :index="resolvePath(onlychildren.path)">
-          <!-- item 组件实现有问题 -->
-          <!-- <Item :data="onlychildren.meta" /> -->
           <SvgIcon
             v-if="onlychildren.meta && onlychildren.meta.icon"
             class="svg-icon__item"
@@ -30,7 +28,6 @@
           :name="item.meta.icon"
           :size="14"
         />
-        <!-- <Item :data="item.meta" /> -->
         <span v-if="!isCollapse">{{ item.meta.title }}</span>
       </template>
       <!-- 使用组件递归时需要指定组件的name，否则无法调用 -->
@@ -51,19 +48,19 @@ export default {
 </script>
 
 <script setup lang="ts">
-import Item from '../components/item/index.vue'
 import Link from '../components/link/index.vue'
-import { ref, computed } from 'vue'
-import { useAppStore } from '@/store/modules/app'
+import { ref, unref, computed } from 'vue'
+import { useMenuSetting } from '@/hooks/setting/useMenuSetting'
 import { isExtrernalLink } from '@/utils/validate'
 
 interface Props {
-  item: object
+  item: object | any
   path: string
 }
 const props = withDefaults(defineProps<Props>(), {})
 const onlychildren = ref(null)
-const isCollapse = computed(() => !useAppStore().opened)
+const { getMenuCollapsed } = useMenuSetting()
+const isCollapse = computed(() => unref(getMenuCollapsed))
 
 /** 判断是否只存在一个children */
 function hasOnlyChildren(childrenRoutes = [], parentRoute = {}) {

@@ -29,5 +29,7 @@ export function handler(event: HandlerEnum, value: any): SystemConfig {
       return { showTagger: value }
     case HandlerEnum.MENU_SHOW:
       return { menuSetting: { show: value } }
+    case HandlerEnum.MENU_COLLAPSE:
+      return { menuSetting: { collapsed: value } }
   }
 }

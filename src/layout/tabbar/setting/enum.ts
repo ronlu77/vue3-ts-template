@@ -13,4 +13,5 @@ export enum HandlerEnum {
 
   // menu setting
   MENU_SHOW,
+  MENU_COLLAPSE,
 }
