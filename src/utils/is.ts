@@ -35,3 +35,8 @@ export const isObject = (val: any): boolean => {
 export const isArray = (val: any): boolean => {
   return val && Array.isArray(val)
 }
+
+export const isRedirectPath = (path: string): boolean => {
+  const regexp = /^\/redirect/
+  return regexp.test(path)
+}

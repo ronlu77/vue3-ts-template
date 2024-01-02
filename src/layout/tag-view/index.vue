@@ -32,14 +32,12 @@
         class="svg-icon-item"
         name="refresh"
         size="12"
-        color="#9292AE"
         v-throttle="handleRefreshPage"
       />
       <div class="svg-icon-item dropdown-btn">
         <SvgIcon
           name="dropdown"
           size="12"
-          color="#9292AE"
           @click.stop="toToggleTagViewOptionCard"
         />
         <TagViewOptionCard
@@ -53,7 +51,6 @@
         class="svg-icon-item"
         name="fullscreen2"
         size="12"
-        color="#9292AE"
         @click="toToggleMainContentFullScreen"
       />
     </div>
@@ -62,19 +59,12 @@
 
 <script setup lang="ts">
 import TagViewOptionCard from './TagViewOptionCard.vue'
-import {
-  ref,
-  computed,
-  onBeforeMount,
-  onBeforeUnmount,
-  onMounted,
-  watch,
-  getCurrentInstance,
-} from 'vue'
+import { ref, computed, onBeforeMount, watch, getCurrentInstance } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import useTagViewsStore from '@/store/modules/tagViews'
 import usePermissionStore from '@/store/modules/permission'
 import { useEventListener } from '@/hooks/event/useEventListener'
+import { isRedirectPath } from '@/utils/is'
 import { cloneDeep } from 'lodash-es'
 
 const { proxy, appContext } = getCurrentInstance()
@@ -89,8 +79,7 @@ let refreAnimation = null // 刷新动画对象
 
 // 监听路由变化，路由变化了添加到 tagViewList 中, 除用于实现刷新页面效果的 /redirect/:path(.*) 路由外
 watch(route, (newVal) => {
-  const regexp = /^\/redirect/
-  if (regexp.test(newVal.path)) return
+  if (isRedirectPath(newVal.path)) return
   //! 此处需要深拷贝 route！ 否则再次添加, 路由改变将引起 tagViewList 中上传存储的数据改变，导致不会新增 tagView, 而是更改上次添加的 tagview
   tagStore.addTagView(cloneDeep(route))
 })
@@ -106,7 +95,7 @@ watch(
 
 // 判断tag view 是否为当前路由
 const isActive = (tag: any): boolean => {
-  return tag.path === route.path
+  return tag.path === route.path.replace('/redirect', '')
 }
 
 /** 判断是否为固定项 */
@@ -168,7 +157,7 @@ function handleCloseTagView(tagView: any): void {
 }
 
 //#region option zone
-/** 刷新时添加动画帧 */
+/** 刷新当前页面操作 */
 function handleRefreshPage() {
   tagStore.refreshing = true
   tagStore.refreshPage(route)
@@ -223,14 +212,6 @@ onBeforeMount(() => {
     },
   })
 })
-
-onBeforeUnmount(() => {
-  document.body.removeEventListener('click', () => {
-    // console.log('remove click')
-  })
-})
-
-onMounted(() => {})
 </script>
 
 <style lang="scss" scoped>

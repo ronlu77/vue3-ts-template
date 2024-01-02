@@ -1,5 +1,5 @@
 <template>
-  <div class="breadcrumb-container">
+  <div class="breadcrumb-container breadcrumb">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item
         v-for="item in levelList"
@@ -13,16 +13,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import { isRedirectPath } from '@/utils/is'
 
 const route = useRoute()
-const levelList = computed(() =>
-  route.matched.filter((item) => item.meta && item.meta.title),
-)
-</script>
+const levelList = ref([])
 
-<style lang="scss" scoped>
-.breadcrumb-container {
+function getBreadCrumbItem(): Array<any> {
+  const matched = route.matched.filter((item) => item.meta && item.meta.title)
+  return matched
 }
-</style>
+
+watchEffect(() => {
+  if (isRedirectPath(route.path)) return
+  levelList.value = getBreadCrumbItem()
+})
+</script>
