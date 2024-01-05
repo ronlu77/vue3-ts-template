@@ -1,6 +1,6 @@
 <template>
   <el-drawer
-    v-model="useVisible"
+    v-model="appStore.visible"
     title="项目配置"
     :size="300"
     destroy-on-close
@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 import SwitchItem from './components/SwitchItem.vue'
-import { ref, computed, unref } from 'vue'
+import { unref } from 'vue'
 import { useDark, useToggle } from '@vueuse/core'
 import { useAppStore } from '@/store/modules/app'
 import { useRootSetting } from '@/hooks/setting/useRootSetting'
@@ -78,17 +78,7 @@ import { useMenuSetting } from '@/hooks/setting/useMenuSetting'
 import { HandlerEnum } from './enum'
 import { Sunny, Moon } from '@element-plus/icons-vue'
 
-const props = defineProps({
-  visible: {
-    type: Boolean,
-  },
-})
-const emit = defineEmits(['update:visible'])
-const useVisible = computed({
-  get: (): boolean => props.visible,
-  set: (val): void => emit('update:visible', val),
-})
-const { setSystemDark, getSystemDark } = useAppStore()
+const appStore = useAppStore()
 const { getShowLogo, getShowFooter, getShowTagger, getShowBreadcrumb } =
   useRootSetting()
 const { getShowHeader } = useHeaderSetting()
@@ -105,7 +95,7 @@ const isDark = useDark({
 
 function toggleDarkTheme(val: boolean) {
   const theme = val ? 'dark' : 'light'
-  setSystemDark(theme)
+  appStore.setSystemDark(theme)
   useToggle(isDark)
 }
 </script>

@@ -22,19 +22,16 @@
       @click="toSetting"
     ></SvgIcon>
   </div>
-
-  <!-- 系统配置 -->
-  <SettingDrawer v-model:visible="visibleSetting" />
 </template>
 
 <script setup lang="ts">
-import SettingDrawer from './SettingDrawer.vue'
 import Translate from './Translate.vue'
 import UserCenter from './UserCenter.vue'
 import UnreadMessgae from './UnreadMessage.vue'
-import { ref, nextTick } from 'vue'
+import { ref } from 'vue'
+import { useAppStore } from '@/store/modules/app'
 
-const visibleSetting = ref(false)
+const appStore = useAppStore()
 const isFullScreen = ref(false)
 
 function handleSearch() {
@@ -53,7 +50,7 @@ function handleScreenfull() {
 }
 
 function toSetting() {
-  visibleSetting.value = true
+  appStore.toggleSystemSetting()
 }
 </script>
 

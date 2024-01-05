@@ -1,4 +1,19 @@
 // 更改el-menu-item 选中时的样式
+.el-header {
+  padding: 0 !important;
+  height: auto !important;
+}
+
+.el-main {
+  padding: 0 !important;
+  background: $background-color;
+}
+
+.el-aside {
+  height: 100%;
+  background: $menu-background;
+}
+
 .el-menu {
   border-right: none !important;
 }

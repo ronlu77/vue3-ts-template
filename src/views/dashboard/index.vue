@@ -1,13 +1,15 @@
 <template>
   <div class="analysis-cards__container">
-    <GroupCard
-      class="group-card"
-      v-for="item in dataCardList"
-      :item="item"
-      :key="item.id"
-    ></GroupCard>
+    <div class="group-card__wrapper">
+      <GroupCard
+        class="group-card"
+        v-for="item in dataCardList"
+        :item="item"
+        :key="item.id"
+      ></GroupCard>
+    </div>
     <el-card class="graph-tab" shadow="never">
-      <el-tabs v-model="activeName">
+      <el-tabs v-model="activeName" @change="handleTabChange">
         <el-tab-pane label="流量趋势" name="trend">
           <div class="curved-line__container" ref="lineGraph"></div>
         </el-tab-pane>
@@ -89,7 +91,7 @@ const option1 = {
     },
   },
   legend: {
-    data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine'],
+    data: ['游客', '用户', '会员'],
   },
   grid: {
     left: '3%',
@@ -196,7 +198,7 @@ const option2 = {
 }
 const transGraphOption = {
   legend: {
-    top: 'bottom',
+    top: 'top',
     left: 'center',
     data: ['访问', '购买'],
   },
@@ -204,14 +206,14 @@ const transGraphOption = {
     left: 'center',
   },
   radar: {
-    // shape: 'circle',
+    radius: '60%',
     indicator: [
-      { name: '旅游', max: 6500 },
-      { name: '教育', max: 16000 },
-      { name: '文娱', max: 30000 },
-      { name: '医疗', max: 38000 },
-      { name: '生鲜', max: 52000 },
-      { name: '家居', max: 25000 },
+      { name: '旅游', max: 6500, min: 0 },
+      { name: '教育', max: 16000, min: 0 },
+      { name: '文娱', max: 30000, min: 0 },
+      { name: '医疗', max: 38000, min: 0 },
+      { name: '生鲜', max: 52000, min: 0 },
+      { name: '家居', max: 25000, min: 0 },
     ],
   },
   series: [
@@ -236,14 +238,14 @@ const hitsGraphOption = {
     trigger: 'item',
   },
   legend: {
-    top: 'bottom',
+    top: 'top',
     left: 'center',
   },
   series: [
     {
       name: '访问途径',
       type: 'pie',
-      radius: ['40%', '70%'],
+      radius: ['40%', '60%'],
       avoidLabelOverlap: false,
       itemStyle: {
         borderRadius: 10,
@@ -276,13 +278,13 @@ const hitsGraphOption = {
 }
 const compleGraphOption = {
   legend: {
-    top: 'bottom',
+    top: 'top',
   },
   series: [
     {
       name: '销量比例',
       type: 'pie',
-      radius: [20, 120],
+      radius: [20, 100],
       center: ['50%', '50%'],
       roseType: 'area',
       itemStyle: {
@@ -307,9 +309,12 @@ const drawPieGraph = (ref: Ref<HTMLDivElement>, option: any) => {
   setOption(option)
 }
 
+function handleTabChange(val: string) {
+  val === 'hits' && drawPieGraph(barGraph, option2)
+}
+
 onMounted(() => {
   drawPieGraph(lineGraph, option1)
-  drawPieGraph(barGraph, option2)
   drawPieGraph(transPie, transGraphOption)
   drawPieGraph(hitsPie, hitsGraphOption)
   drawPieGraph(complePie, compleGraphOption)
@@ -321,25 +326,11 @@ onMounted(() => {
   display: flex;
   flex-wrap: wrap;
 
-  .group-card {
-    flex: calc((100% - 50px) / 4);
-    min-width: calc((100% - 50px) / 4);
-  }
-
-  @media screen and (width < 1100px) {
-    flex-direction: column;
-
-    .group-card,
-    .group-card {
-      flex: 1;
-    }
-  }
-
   .graph-tab {
     width: 100%;
     height: 390px;
     max-height: 400px;
-    margin: 5px 10px 0;
+    margin: 0 10px;
   }
   .graph-card {
     flex-basis: calc((100% - 40px) / 3);
@@ -347,6 +338,30 @@ onMounted(() => {
     height: 400px;
     min-height: 400px;
     margin: 10px 0 10px 10px;
+  }
+}
+
+.group-card__wrapper {
+  width: 100%;
+  display: flex;
+  margin: 6px 10px 10px;
+
+  .group-card {
+    flex: calc((100% - 80px) / 4);
+    min-width: calc((100% - 80px) / 4);
+  }
+
+  .group-card + .group-card {
+    margin-left: 10px;
+  }
+
+  @media screen and (width < 1100px) {
+    flex-direction: column;
+
+    .group-card {
+      flex: 1;
+      margin: 10px 0 !important;
+    }
   }
 }
 

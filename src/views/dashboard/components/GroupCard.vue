@@ -29,8 +29,6 @@ defineProps<{
 
 <style lang="scss" scoped>
 .group-card__container {
-  padding: 5px;
-
   .group-card__header,
   .group-card__main,
   .group-card__footer {
@@ -45,5 +43,9 @@ defineProps<{
       font-size: 24px;
     }
   }
+}
+
+.group-card__item + .group-card__item {
+  margin-left: 10px;
 }
 </style>

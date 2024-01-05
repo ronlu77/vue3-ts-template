@@ -4,7 +4,9 @@ import { MenuSetting } from '#/config'
 
 export function useMenuSetting() {
   const appStore = useAppStore()
-  const getMenuCollapsed = computed(() => appStore.getMenuConfig.collapsed)
+  const getMenuCollapsed = computed(
+    () => appStore.getMenuConfig.collapsed || false,
+  )
   const getShowSidebar = computed(() => appStore.getMenuConfig.show)
 
   function setMenuSetting(menuSetting: MenuSetting): any {
