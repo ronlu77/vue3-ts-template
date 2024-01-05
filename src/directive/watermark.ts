@@ -1,5 +1,5 @@
 // 通过自定义指令实现图片水印添加
-//? 解决通过路径获取本地水印图片无法使用
+//! 解决通过路径获取本地水印图片无法使用
 import watermark from '@/assets/images/watermark.png'
 
 export default {

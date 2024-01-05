@@ -1,6 +1,6 @@
 //  点击事件节流自定义指令
 export default {
-  mounted: (el, binding) => {
+  mounted: (el: HTMLDivElement, binding: any) => {
     const { value: method, arg } = binding
     let isPass = true
     el.addEventListener('click', () => {
