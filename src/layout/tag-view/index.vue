@@ -91,9 +91,13 @@ const { routes } = usePermissionStore()
 const appStore = useAppStore()
 const tagStore = useTagViewsStore()
 const { getShowHeader } = useHeaderSetting()
-const tagViewList = computed((): any => tagStore.tagViewList) // 获取需要展示的tag集合
+const tagViewList = computed(() => tagStore.tagViewList) // 获取需要展示的tag集合
 const showSetting = computed(() => !unref(getShowHeader))
+const isFullScreen = computed(
+  () => appStore.getSystemConfig.fullScreen || false,
+)
 const isCardVisible = ref<boolean>(false) // 控制标签操作卡片显隐
+
 let isFirstRender = true // 是否为首次组件渲染
 let refreAnimation = null // 刷新动画对象
 
@@ -191,9 +195,10 @@ function handleCardClose(val: boolean) {
 }
 
 function toToggleMainContentFullScreen() {
-  //todo main-app 部分的全屏实现
-  // top 和 sidebar 隐藏再进行全屏操作
   isCardVisible.value = false
+  appStore.setHeaderSetting({ show: isFullScreen.value })
+  appStore.setMenuSetting({ show: isFullScreen.value })
+  appStore.setSystemConfig({ fullScreen: !isFullScreen.value })
 }
 //#endregion
 

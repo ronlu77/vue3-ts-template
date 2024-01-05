@@ -8,6 +8,7 @@ export interface SystemConfig {
   showLogo: boolean // logo
   menuSetting: MenuSetting
   showFooter: boolean // 页脚
+  fullScreen: boolean // 全屏2
 }
 
 export interface HeaderSetting {

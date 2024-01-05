@@ -37,6 +37,13 @@ export const useAppStore = defineStore('App', {
       ) as SystemConfig
       localStorage.setItem('SYSTEM_CONFIG', JSON.stringify(this.systemConfig))
     },
+    setHeaderSetting(config: SystemConfig): void {
+      this.systemConfig!.headerSetting = deepMerge(
+        this.systemConfig!.headerSetting,
+        config,
+      ) as SystemConfig
+      localStorage.setItem('SYSTEM_CONFIG', JSON.stringify(this.systemConfig))
+    },
     setSystemDark(mode: 'dark' | 'light' | string = 'light'): void {
       this.darkMode = mode
       localStorage.setItem('_APP_DARK_MODE_', mode)
