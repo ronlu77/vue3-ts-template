@@ -1,7 +1,7 @@
 // axios 进行二次封装
 import axios from 'axios'
 import useUserStore from '@/store/modules/user'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 //#region step1 通过create方法创建axios实例对象，可以进行一些基础配置
 const request = axios.create({
@@ -32,7 +32,6 @@ request.interceptors.response.use(
     const status = error.response.status
     switch (status) {
       case 401:
-        message = '未登录'
         break
       // 403 token过期
       // 登录过期对用户进行提示
@@ -51,10 +50,7 @@ request.interceptors.response.use(
         message = error.response.data.message
         break
     }
-    ElMessage({
-      type: 'error',
-      message,
-    })
+    ElMessage.error(message)
     return Promise.reject(error)
   },
 )

@@ -1,17 +1,24 @@
 import { defineStore } from 'pinia'
-import { SystemConfig } from '#/config'
 import { deepMerge } from '@/utils'
 import { ThemeEnum } from '@/enums/appenums'
-
+import { SystemConfig } from '#/config'
 interface AppState {
+  visible: boolean
   darkMode?: ThemeEnum
   systemConfig: SystemConfig | null
 }
 
 export const useAppStore = defineStore('App', {
   state: (): AppState => ({
+    visible: false, // 控制系统配置抽屉的显示隐藏
     darkMode: undefined,
-    systemConfig: JSON.parse(localStorage.getItem('SYSTEM_CONFIG')) || {},
+    systemConfig: JSON.parse(localStorage.getItem('SYSTEM_CONFIG')) || {
+      headerSetting: { show: true },
+      showLogo: true,
+      showTagger: true,
+      showBreadcrumb: true,
+      menuSetting: { show: true },
+    },
   }),
   actions: {
     /** 设置系统配置 */
@@ -33,6 +40,9 @@ export const useAppStore = defineStore('App', {
     setSystemDark(mode: 'dark' | 'light' | string = 'light'): void {
       this.darkMode = mode
       localStorage.setItem('_APP_DARK_MODE_', mode)
+    },
+    toggleSystemSetting(): void {
+      this.visible = !this.visible
     },
   },
   getters: {
