@@ -8,7 +8,7 @@ type RootSetting = Omit<
   'locale' | 'headerSetting' | 'menuSetting'
 >
 
-export function useRootSetting() {
+export function useRootSetting(): RootSetting {
   const appStore = useAppStore()
   const getShowLogo = computed(() => appStore.getSystemConfig.showLogo)
   const getSidebar = computed(() => appStore.getSystemConfig.showSidebar)

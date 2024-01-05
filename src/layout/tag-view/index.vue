@@ -26,15 +26,22 @@
         </div>
       </el-scrollbar>
     </div>
-    <div class="tag-view-right">
+    <div class="tag-view__right">
+      <SvgIcon
+        v-if="showSetting"
+        class="svg-icon__item"
+        name="setting"
+        size="12"
+        @click="toShowSysyemSetDrawer"
+      />
       <SvgIcon
         ref="refSvg"
-        class="svg-icon-item"
+        class="svg-icon__item"
         name="refresh"
         size="12"
         v-throttle="handleRefreshPage"
       />
-      <div class="svg-icon-item dropdown-btn">
+      <div class="svg-icon__item dropdown-btn">
         <SvgIcon
           name="dropdown"
           size="12"
@@ -48,7 +55,7 @@
         />
       </div>
       <SvgIcon
-        class="svg-icon-item"
+        class="svg-icon__item"
         name="fullscreen2"
         size="12"
         @click="toToggleMainContentFullScreen"
@@ -59,11 +66,21 @@
 
 <script setup lang="ts">
 import TagViewOptionCard from './TagViewOptionCard.vue'
-import { ref, computed, onBeforeMount, watch, getCurrentInstance } from 'vue'
+import {
+  ref,
+  unref,
+  computed,
+  onBeforeMount,
+  watch,
+  getCurrentInstance,
+} from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import useTagViewsStore from '@/store/modules/tagViews'
 import usePermissionStore from '@/store/modules/permission'
+import { useAppStore } from '@/store/modules/app'
 import { useEventListener } from '@/hooks/event/useEventListener'
+import { useHeaderSetting } from '@/hooks/setting/useHeaderSetting'
+import { findNodeIndex } from '@/utils'
 import { isRedirectPath } from '@/utils/is'
 import { cloneDeep } from 'lodash-es'
 
@@ -71,8 +88,11 @@ const { proxy, appContext } = getCurrentInstance()
 const route = useRoute()
 const router = useRouter()
 const { routes } = usePermissionStore()
+const appStore = useAppStore()
 const tagStore = useTagViewsStore()
+const { getShowHeader } = useHeaderSetting()
 const tagViewList = computed((): any => tagStore.tagViewList) // 获取需要展示的tag集合
+const showSetting = computed(() => !unref(getShowHeader))
 const isCardVisible = ref<boolean>(false) // 控制标签操作卡片显隐
 let isFirstRender = true // 是否为首次组件渲染
 let refreAnimation = null // 刷新动画对象
@@ -103,6 +123,11 @@ const isAffix = (tag: any): boolean => {
   return tag.meta && tag.meta.affix
 }
 
+// 系统配置抽屉
+function toShowSysyemSetDrawer() {
+  appStore.toggleSystemSetting()
+}
+
 /** 获取开启affix: true 路由项 */
 function filterAffixTags(routes: any[], basePath = ''): any[] {
   let tags = []
@@ -123,20 +148,6 @@ function filterAffixTags(routes: any[], basePath = ''): any[] {
   return tags
 }
 
-// 寻找当前tagView在集合中的下标
-const findTagViewIndex = (tagViewList: Array<any>, tagView: any): number => {
-  let tagViewIndex = -1
-  let idx = 0
-  if (!tagViewList.length) return tagViewIndex
-  while (idx < tagViewList.length) {
-    if (tagViewList[idx].fullPath === tagView.fullPath) {
-      return idx
-    }
-    idx++
-  }
-  return tagViewIndex
-}
-
 //todo 滚动到当前 tag view
 function toScrollCurrentTagView(): void {
   const CONTAINER = document.querySelector('.tag-view-container')
@@ -146,7 +157,7 @@ function toScrollCurrentTagView(): void {
 
 // 删除 tag view
 function handleCloseTagView(tagView: any): void {
-  const tagViewIndex = findTagViewIndex(tagViewList.value, tagView)
+  const tagViewIndex = findNodeIndex(unref(tagViewList), tagView, 'fullPath')
   const lastIndex = tagViewIndex - 1
   if (isActive(tagView)) {
     lastIndex !== -1
@@ -230,7 +241,7 @@ onBeforeMount(() => {
     }
   }
 
-  .tag-view-right {
+  .tag-view__right {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -238,7 +249,7 @@ onBeforeMount(() => {
   }
 }
 
-.svg-icon-item {
+.svg-icon__item {
   flex: 1;
   height: 100%;
   cursor: pointer;
@@ -252,7 +263,7 @@ onBeforeMount(() => {
 .tag-view-container {
   display: flex;
 
-  .svg-icon-item_container {
+  .svg-icon__item_container {
     height: 100%;
   }
 

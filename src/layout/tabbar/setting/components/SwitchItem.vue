@@ -35,7 +35,7 @@ const useBindValue = ref(props.bindValue ? props.bindValue : false)
 
 // todo 当系统配置更改时，需要更新示图
 function handleChange(val: boolean) {
-  props.event && baseHandler(props.event, val)
+  baseHandler(props.event, val)
 }
 </script>
 <style lang="scss" scoped>
