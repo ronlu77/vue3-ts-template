@@ -39,6 +39,9 @@
 
     <!-- 系统配置抽屉 -->
     <SettingDrawer />
+
+    <!-- 系统搜索 -->
+    <AppSearch v-if="getSearching" />
   </div>
 </template>
 
@@ -59,7 +62,7 @@ import variables from '@/styles/variable.module.scss'
 
 const route = useRoute()
 const { getShowLogo, getShowTagger } = useRootSetting()
-const { getShowHeader } = useHeaderSetting()
+const { getShowHeader, getSearching } = useHeaderSetting()
 const { getShowSidebar, getMenuCollapsed } = useMenuSetting()
 const showLogo = computed(() => unref(getShowLogo))
 const showSidebar = computed(() => unref(getShowSidebar))

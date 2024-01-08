@@ -6,6 +6,7 @@ import CountdownTimerDialog from './CountdownTimerDialog/index.vue'
 import ExpandCard from './ExpandCard/index.vue'
 import EllipsisText from './EllipsisText/index.vue'
 import Tooltip from './Tooltip/index.vue'
+import AppSearch from './AppSearch/index.vue'
 
 const AllGlobalComponent: any = {
   SvgIcon,
@@ -16,6 +17,7 @@ const AllGlobalComponent: any = {
   ExpandCard,
   EllipsisText,
   Tooltip,
+  AppSearch,
 }
 
 // 暴露全局组件注册插件对象

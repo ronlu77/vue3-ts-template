@@ -13,6 +13,7 @@ export interface SystemConfig {
 
 export interface HeaderSetting {
   show: boolean // 顶栏
+  searching: boolean // 搜索ing
   showSearch: boolean // 搜索功能
   showNotice: boolean // 消息提示功能
   showFullScreen: boolean // 全屏功能
