@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebartrigger-wrapper">
+  <div class="sidebartrigger__wrapper">
     <el-icon>
       <component :is="iconComponent" @click="toggleCollpase"></component>
     </el-icon>
@@ -21,7 +21,7 @@ function toggleCollpase() {
 </script>
 
 <style lang="scss" scoped>
-.sidebartrigger-wrapper {
+.sidebartrigger__wrapper {
   display: flex;
   align-items: center;
   height: 100%;

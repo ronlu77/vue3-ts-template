@@ -1,13 +1,13 @@
 <template>
   <div class="tabbar">
-    <div class="tabbar-left">
+    <div class="tabbar__left">
       <SidebarTrigger
         :is-collpase="isCollapse"
         @toggle-collpase="handleToggleCollpase"
       />
       <Breadcrumb v-if="unref(getShowBreadcrumb)" />
     </div>
-    <div class="tabbar-right">
+    <div class="tabbar__right">
       <Setting />
     </div>
   </div>
@@ -17,13 +17,13 @@
 import SidebarTrigger from './SidebarTrigger.vue'
 import Breadcrumb from './breadcrumb/index.vue'
 import Setting from './setting/index.vue'
-import { ref, unref, computed } from 'vue'
+import { unref, computed } from 'vue'
 import { useRootSetting } from '@/hooks/setting/useRootSetting'
 import { useMenuSetting } from '@/hooks/setting/useMenuSetting'
 
 const { getShowBreadcrumb } = useRootSetting()
-const { getShowSidebar, toggleMenu } = useMenuSetting()
-const isCollapse = computed(() => unref(getShowSidebar))
+const { getMenuCollapsed, toggleMenu } = useMenuSetting()
+const isCollapse = computed(() => unref(getMenuCollapsed))
 
 function handleToggleCollpase() {
   toggleMenu()
@@ -40,13 +40,13 @@ function handleToggleCollpase() {
   height: 40px;
   border-bottom: 1px solid $border-color;
 
-  .tabbar-left {
+  .tabbar__left {
     display: flex;
     align-items: center;
     height: 100%;
   }
 
-  .tabbar-right {
+  .tabbar__right {
     height: 100%;
   }
 }

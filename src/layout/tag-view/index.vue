@@ -1,8 +1,8 @@
 <template>
   <div class="tag-view">
-    <div class="tag-view-left">
+    <div class="tag-view__left">
       <el-scrollbar ref="elScrollbar">
-        <div class="tag-view-container">
+        <div class="tag-view__container">
           <!-- RouteLink 嵌套时，内部嵌套元素如果绑定了事件需要使用prevent 修饰符组织默认行为，否则会引发RouteLink的默认行为，造成路由多次跳转 -->
           <router-link
             class="tag-view__item"
@@ -13,7 +13,7 @@
             @click="toScrollCurrentTagView()"
           >
             <div class="tag-view__body">
-              <span class="tag_view_title">{{ item.meta.title }}</span>
+              <span class="tag-view-title">{{ item.meta.title }}</span>
               <el-icon
                 v-if="!isAffix(item)"
                 class="icon-close"
@@ -91,7 +91,7 @@ const { routes } = usePermissionStore()
 const appStore = useAppStore()
 const tagStore = useTagViewsStore()
 const { getShowHeader } = useHeaderSetting()
-const tagViewList = computed(() => tagStore.tagViewList) // 获取需要展示的tag集合
+const tagViewList = computed((): any => tagStore.tagViewList) // 获取需要展示的tag集合
 const showSetting = computed(() => !unref(getShowHeader))
 const isFullScreen = computed(
   () => appStore.getSystemConfig.fullScreen || false,
@@ -154,7 +154,7 @@ function filterAffixTags(routes: any[], basePath = ''): any[] {
 
 //todo 滚动到当前 tag view
 function toScrollCurrentTagView(): void {
-  const CONTAINER = document.querySelector('.tag-view-container')
+  const CONTAINER = document.querySelector('.tag-view__container')
   const CONTAINER_WIDTH = CONTAINER.clientWidth
   console.log(CONTAINER_WIDTH, CONTAINER.clientLeft)
 }
@@ -237,7 +237,7 @@ onBeforeMount(() => {
   height: $tag-view-height;
   border-bottom: 1px solid $border-color;
 
-  .tag-view-left {
+  .tag-view__left {
     flex: 1;
     margin: 0 6px;
 
@@ -265,12 +265,8 @@ onBeforeMount(() => {
   }
 }
 
-.tag-view-container {
+.tag-view__container {
   display: flex;
-
-  .svg-icon__item_container {
-    height: 100%;
-  }
 
   .tag-view__item {
     flex-shrink: 0;
@@ -286,7 +282,7 @@ onBeforeMount(() => {
       font-size: 14px;
     }
 
-    .tag_view_title {
+    .tag-view-title {
       padding: 0 6px;
     }
 
@@ -305,7 +301,7 @@ onBeforeMount(() => {
   }
 }
 
-.tag-view-container .tag-view__item.active {
+.tag-view__container .tag-view__item.active {
   background: $active-color;
   color: $normal-color;
 }
