@@ -34,6 +34,7 @@ import { useAppStore } from '@/store/modules/app'
 const appStore = useAppStore()
 const isFullScreen = ref(false)
 
+// todo 搜索功能
 function handleSearch() {
   console.log('搜索功能')
 }

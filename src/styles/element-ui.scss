@@ -12,6 +12,7 @@
 .el-aside {
   height: 100%;
   background: $menu-background;
+  overflow: hidden !important;
 }
 
 .el-menu {
@@ -48,8 +49,7 @@
   background-color: $menu-background !important;
 }
 
-// 只有隐藏状态下的副标题才需要居中
-.hiden .el-sub-menu__title {
+.el-menu--collapse .el-sub-menu__title {
   justify-content: center;
 }
 

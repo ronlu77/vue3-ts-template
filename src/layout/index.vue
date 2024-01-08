@@ -3,24 +3,27 @@
     <el-container style="height: 100vh">
       <el-aside v-show="showSidebar" :width="asideWidth">
         <Logo :collapse="isCollapse" v-if="showLogo" />
-        <el-menu
-          mode="vertical"
-          :default-active="currentActiveMenuPath"
-          :collapse="isCollapse"
-          :unique-opened="true"
-          :collapse-transition="false"
-          :text-color="textColor"
-          :background-color="backgroundColor"
-        >
-          <MenuItem
-            v-for="route in menuList"
-            :key="route.path"
-            :item="route"
-            :path="route.path"
-          />
-        </el-menu>
+        <div class="menu" :class="{ logo: showLogo }">
+          <el-scrollbar style="height: 100%">
+            <el-menu
+              mode="vertical"
+              :default-active="currentActiveMenuPath"
+              :collapse="isCollapse"
+              :unique-opened="true"
+              :collapse-transition="false"
+              :text-color="textColor"
+              :background-color="backgroundColor"
+            >
+              <MenuItem
+                v-for="route in menuList"
+                :key="route.path"
+                :item="route"
+                :path="route.path"
+              />
+            </el-menu>
+          </el-scrollbar>
+        </div>
       </el-aside>
-
       <el-container>
         <el-header>
           <Tabbar v-if="showTabbar" />
@@ -78,5 +81,13 @@ const asideWidth = computed(() =>
   width: 100%;
   height: 100vh;
   overflow: hidden;
+}
+
+.menu {
+  height: 100%;
+}
+
+.menu.logo {
+  height: calc(100% - $base-logo-height);
 }
 </style>
