@@ -9,7 +9,7 @@
       </transition>
     </router-view>
     <div class="copyright" v-if="showFooter">
-      <p>2023&nbsp;-&nbsp;{{ currentYear }}&nbsp; EMS by ron</p>
+      <p>2023&nbsp;-&nbsp;{{ currentYear }}&nbsp; EMS by rainy_992</p>
     </div>
   </div>
 </template>

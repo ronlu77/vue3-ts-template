@@ -173,7 +173,7 @@ function onEnd({ oldIndex, newIndex }) {
 /** 判断下标所属区间, 边界特殊情况 */
 function indexOfInterval(index, limits) {
   const { left, right } = limits
-  let interval
+  let interval = ''
   if (index <= left) {
     interval = 'left'
   } else if (index < right) {
@@ -197,6 +197,9 @@ function setFixedColumns(list, limits) {
 function resetTable() {}
 </script>
 <style lang="scss" scoped>
+.el-divider {
+  margin: 0 !important;
+}
 .navtool-setting-card {
   min-width: 120px;
 

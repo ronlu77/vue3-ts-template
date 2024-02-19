@@ -35,6 +35,10 @@ function toggleExpandCard() {
 }
 </script>
 <style lang="scss" scoped>
+.el-divider {
+  margin: 0 !important;
+}
+
 .expand-card__wrapper {
   display: flex;
   flex-direction: column;

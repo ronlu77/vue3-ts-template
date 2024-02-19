@@ -15,7 +15,7 @@ export function useHeaderSetting() {
     appStore.setHeaderSetting(config)
   }
 
-  function toggleSearch() {
+  function toggleSearchScreen() {
     setSearchShow({ searching: !unref(getSearching) })
   }
 
@@ -23,6 +23,6 @@ export function useHeaderSetting() {
     getShowHeader,
     getShowSearch,
     getSearching,
-    toggleSearch,
+    toggleSearchScreen,
   }
 }

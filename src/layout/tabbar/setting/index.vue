@@ -34,11 +34,11 @@ import { useHeaderSetting } from '@/hooks/setting/useHeaderSetting'
 
 const appStore = useAppStore()
 const isFullScreen = ref(false)
-const { toggleSearch } = useHeaderSetting()
+const { toggleSearchScreen } = useHeaderSetting()
 
 // todo 搜索功能
 function handleSearch() {
-  toggleSearch()
+  toggleSearchScreen()
 }
 
 function handleScreenfull() {
